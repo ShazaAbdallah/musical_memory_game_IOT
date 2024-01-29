@@ -23,7 +23,7 @@
 */
 
 // constants won't change. They're used here to set pin numbers:
-const int buttonPin = 13;  // the number of the pushbutton pin
+const int buttonPin = 12;  // the number of the pushbutton pin
 const int ledPin = 2;    // the number of the LED pin
 
 // variables will change:
