@@ -7,10 +7,14 @@
 #endif
 #include <HardwareSerial.h>
 
+
+extern int user_index;
+extern int sequences[];
+
 void colorWipe(uint32_t color, int wait, Adafruit_NeoPixel* strip);
 
-buttonPress::buttonPress(const int buttonPin,const int pixelPin, const int pixelCount, int filename):
-buttonPin(buttonPin),pixelPin(pixelPin),pixelCount(pixelCount),filename(filename),strip(pixelCount, pixelPin, NEO_GRB + NEO_KHZ800)
+buttonPress::buttonPress(const int buttonPin,const int ledPin, int filename, int id):
+buttonPin(buttonPin),ledPin(ledPin),filename(filename),id(id)
 {
     buttonState = HIGH;
 }
@@ -18,23 +22,31 @@ void buttonPress::setup()
 {
 // initialize the pushbutton pin as an input:
   pinMode(buttonPin, INPUT_PULLUP);
-  strip.begin(); // Initialize NeoPixel strip object (REQUIRED)
-  strip.show();  // Initial#include <HardwareSerial.h>ize all pixels to 'off'
+  pinMode(ledPin, OUTPUT);
+  //strip.begin(); // Initialize NeoPixel strip object (REQUIRED)
+  //strip.show();  // Initial#include <HardwareSerial.h>ize all pixels to 'off'
 }
-void buttonPress::loop()
+int buttonPress::loop()
 {
     // read the state of the pushbutton value:
   buttonState = digitalRead(buttonPin);
 
   if (buttonState == LOW) {
+    if(id != sequences[user_index])
+    {
+      return -1;
+    }
     set_volume(25);
-    play_filename(1, 2);
+    play_filename(1, filename);
+    user_index++;
     // turn LED on:
-    colorWipe(strip.Color(255,   0,   0), 70, &strip);
+    digitalWrite(ledPin, HIGH);
+    delay(1500);
   } else {
     // turn LED off:
-    colorWipe(strip.Color(  0,   0,   0), 70, &strip);
+    digitalWrite(ledPin, LOW);
   }
+  return 0;
 }
 
 void colorWipe(uint32_t color, int wait, Adafruit_NeoPixel* strip) {
@@ -43,4 +55,23 @@ void colorWipe(uint32_t color, int wait, Adafruit_NeoPixel* strip) {
     strip->show();                          //  Update strip to match
     delay(wait);                           //  Pause for a moment
   }
+}
+
+void buttonPress::show()
+{
+  set_volume(25);
+  play_filename(1, filename);
+  digitalWrite(ledPin, HIGH);
+  delay(1000);
+  digitalWrite(ledPin, LOW);
+}
+
+void buttonPress::off()
+{
+  digitalWrite(ledPin, LOW);
+}
+
+void buttonPress::on()
+{
+   digitalWrite(ledPin, HIGH);
 }

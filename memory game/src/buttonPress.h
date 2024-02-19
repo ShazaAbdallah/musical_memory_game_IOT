@@ -12,14 +12,17 @@ class buttonPress
 {
 public:
     const int buttonPin;
-    const int pixelPin;
-    const int pixelCount;
+    const int ledPin;
     int filename;
     int buttonState;
-    Adafruit_NeoPixel strip;
-    buttonPress(const int buttonPin,const int pixelPin, const int pixelCount, int filename);
+    int id;
+    //Adafruit_NeoPixel strip;
+    buttonPress(const int buttonPin,const int ledPin, int filename, int id);
     void setup();
-    void loop();
+    int loop();
+    void show();
+    void off();
+    void on();
     ~buttonPress() = default;
 };
 
