@@ -8,7 +8,7 @@
 #ifdef __AVR__
  #include <avr/power.h> // Required for 16 MHz Adafruit Trinket
 #endif
-
+// note by amal
 #define NEO_PIN 19
 #define NEO_NUMPIXELS 16
 
