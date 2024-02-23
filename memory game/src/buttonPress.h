@@ -23,6 +23,7 @@ public:
     void show();
     void off();
     void on();
+    bool isPressed();
     ~buttonPress() = default;
 };
 

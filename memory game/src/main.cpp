@@ -4,11 +4,22 @@
 #include <cstdlib> // For std::rand and std::srand
 #include <ctime>   // For std::time
 #include <iostream>
+#include <Adafruit_NeoPixel.h>
+#ifdef __AVR__
+ #include <avr/power.h> // Required for 16 MHz Adafruit Trinket
+#endif
+
+#define NEO_PIN 19
+#define NEO_NUMPIXELS 16
+
+Adafruit_NeoPixel pixels(NEO_NUMPIXELS, NEO_PIN, NEO_GRB + NEO_KHZ800);
+
 
 #define MAX_SEQUENCE 5
 #define USER_MODE 1
 #define GAME_MODE 2
-#define PENDDING_MODE 3
+#define PENDING_MODE 3
+#define DELAYVAL 500
 
 int mode;
 int current_sequence;
@@ -23,26 +34,42 @@ void setup()
 {
   Serial.begin(9600); // Initialize serial communication at 9600 baud rate
   std::srand(static_cast<unsigned int>(std::time(nullptr)));
+  #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
+    clock_prescale_set(clock_div_1);
+  #endif
+  pixels.begin();
+  pixels.clear();
+  pixels.show();
   button_1.setup();
   button_2.setup();
   mp3_setup();
   current_sequence = 0;
-  mode = GAME_MODE;
+  mode = PENDING_MODE;
   user_index = 0;
 }
 
 void loop() {
-  if(mode == GAME_MODE)
+  if(mode == PENDING_MODE)
   {
+    if( button_1.isPressed() || button_2.isPressed())
+    {
+      mode = GAME_MODE;
+    }
+  }
+  else if(mode == GAME_MODE)
+  {
+
     user_index = 0;
     if(current_sequence < MAX_SEQUENCE)
     {
       int random_number = std::rand() % 2 + 1;
       sequences[current_sequence] = random_number;
+      pixels.setPixelColor(current_sequence, pixels.Color(0, 150, 0));
       current_sequence++;
+      pixels.show(); 
       Serial.print("steps: ");
       Serial.println(current_sequence);
-      for(int i = 0; i <= current_sequence; i++)
+      for(int i = 0; i < current_sequence; i++)
       {
         switch (sequences[i])
         {
@@ -68,6 +95,8 @@ void loop() {
       mode = GAME_MODE;
       button_1.off();
       button_2.off();
+      // giving some time before playing the next sequence 
+      delay(200);
     }
     else if (mode = USER_MODE)
     {
@@ -75,7 +104,6 @@ void loop() {
       if(result < 0)
       {
         loser();
-        mode = PENDDING_MODE;
       }
      // Serial.print("My Variable: ");
       //Serial.println(user_index);
@@ -88,5 +116,13 @@ void loser()
 {
   button_1.on();
   button_2.on();
-  play_filename(1, 3);
+  play_filename(2, 6);
+  delay(1500);
+  button_1.off();
+  button_2.off();
+  current_sequence = 0;
+  mode = PENDING_MODE;
+  user_index = 0;
+  pixels.clear();
+  pixels.show();
 }
