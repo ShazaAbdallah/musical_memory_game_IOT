@@ -20,7 +20,7 @@ Adafruit_NeoPixel pixels(NEO_NUMPIXELS, NEO_PIN, NEO_GRB + NEO_KHZ800);
 #define GAME_MODE 2
 #define PENDING_MODE 3
 #define DELAYVAL 500
-
+//only adding a note temporary 
 int mode;
 int current_sequence;
 buttonPress button_1(5, 26, 1, 1);
