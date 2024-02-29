@@ -5,12 +5,15 @@
 #include <ctime>   // For std::time
 #include <iostream>
 #include <Adafruit_NeoPixel.h>
+#include <string>
 #ifdef __AVR__
  #include <avr/power.h> // Required for 16 MHz Adafruit Trinket
 #endif
+#include "firebase.h"
 
 #define NEO_PIN 19
 #define NEO_NUMPIXELS 16
+
 
 Adafruit_NeoPixel pixels(NEO_NUMPIXELS, NEO_PIN, NEO_GRB + NEO_KHZ800);
 
@@ -27,12 +30,14 @@ buttonPress button_1(5, 26, 1, 1);
 buttonPress button_2(27, 18, 2, 2);
 int sequences[MAX_SEQUENCE];
 int user_index;
+String current_user = "";
 
 void loser();
 
 void setup() 
 {
   Serial.begin(9600); // Initialize serial communication at 9600 baud rate
+  firebaseSetup();
   std::srand(static_cast<unsigned int>(std::time(nullptr)));
   #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
     clock_prescale_set(clock_div_1);
@@ -51,6 +56,7 @@ void setup()
 void loop() {
   if(mode == PENDING_MODE)
   {
+    current_user = firebaseReadUser();
     if( button_1.isPressed() || button_2.isPressed())
     {
       mode = GAME_MODE;
@@ -87,6 +93,10 @@ void loop() {
       }
       mode = USER_MODE;
     }
+    else
+    {
+      firebaseWrite(current_user,current_sequence);
+    }
   }
   else if( mode == USER_MODE)
   {
@@ -103,6 +113,10 @@ void loop() {
       int result = button_1.loop() + button_2.loop();
       if(result < 0)
       {
+        if(current_sequence - 1 != 0)
+        {
+          firebaseWrite(current_user, current_sequence-1);
+        }
         loser();
       }
      // Serial.print("My Variable: ");
