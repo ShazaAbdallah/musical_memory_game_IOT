@@ -13,18 +13,22 @@
 
 #define NEO_PIN 19
 #define NEO_NUMPIXELS 16
+#define SWITCH_PIN 33
 
 
 Adafruit_NeoPixel pixels(NEO_NUMPIXELS, NEO_PIN, NEO_GRB + NEO_KHZ800);
 
 
-#define MAX_SEQUENCE 5
+#define MAX_SEQUENCE 2
 #define USER_MODE 1
 #define GAME_MODE 2
 #define PENDING_MODE 3
-#define DELAYVAL 500
+
+#define SIMON_GAME 0
+#define SPEED_GAME 1
 
 int mode;
+int game;
 int current_sequence;
 buttonPress button_1(5, 26, 1, 1);
 buttonPress button_2(27, 18, 2, 2);
@@ -33,11 +37,17 @@ int user_index;
 String current_user = "";
 
 void loser();
+void winner();
+void loop1();
+void loop2();
+void setup1();
+void setup2();
 
 void setup() 
 {
   Serial.begin(9600); // Initialize serial communication at 9600 baud rate
   firebaseSetup();
+  current_user = firebaseReadUser();
   std::srand(static_cast<unsigned int>(std::time(nullptr)));
   #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
     clock_prescale_set(clock_div_1);
@@ -48,15 +58,63 @@ void setup()
   button_1.setup();
   button_2.setup();
   mp3_setup();
+  pinMode(SWITCH_PIN, INPUT_PULLUP);
+  game = digitalRead(SWITCH_PIN);
+  if(game == SIMON_GAME){
+    setup1();
+  }else{
+    setup2();
+  }
+}
+
+void setup1()
+{
   current_sequence = 0;
   mode = PENDING_MODE;
   user_index = 0;
 }
 
-void loop() {
+void setup2()
+{
+  for(int i =0; i < 16; i++)
+  {
+    pixels.setPixelColor(i, pixels.Color(255, 0, 255));
+  }
+  pixels.show();
+}
+
+void loop()
+{
+  int current_game = digitalRead(SWITCH_PIN);
+
+  if(current_game != game)
+  {
+    game = current_game;
+    if(game == SIMON_GAME)
+    {
+      setup1();
+    }
+    else
+    {
+      setup2();
+    }
+  }
+
+  if(game == SIMON_GAME)
+  {
+    loop1();
+  }
+  else
+  {
+    loop2();
+  }
+}
+
+void loop1()
+{
   if(mode == PENDING_MODE)
   {
-    current_user = firebaseReadUser();
+    //Serial.println("in pending");
     if( button_1.isPressed() || button_2.isPressed())
     {
       mode = GAME_MODE;
@@ -64,7 +122,6 @@ void loop() {
   }
   else if(mode == GAME_MODE)
   {
-
     user_index = 0;
     if(current_sequence < MAX_SEQUENCE)
     {
@@ -95,7 +152,7 @@ void loop() {
     }
     else
     {
-      firebaseWrite(current_user,current_sequence);
+      winner();
     }
   }
   else if( mode == USER_MODE)
@@ -113,21 +170,20 @@ void loop() {
       int result = button_1.loop() + button_2.loop();
       if(result < 0)
       {
-        if(current_sequence - 1 != 0)
-        {
-          firebaseWrite(current_user, current_sequence-1);
-        }
         loser();
       }
-     // Serial.print("My Variable: ");
-      //Serial.println(user_index);
     }
   }
 }
 
+void loop2()
+{
+
+}
 
 void loser()
 {
+  int final_level = current_sequence;
   button_1.on();
   button_2.on();
   play_filename(2, 6);
@@ -139,4 +195,29 @@ void loser()
   user_index = 0;
   pixels.clear();
   pixels.show();
+
+  // write to firebase
+  if(final_level - 1 != 0)
+  {
+    firebaseWrite(current_user, final_level-1);
+  }
+}
+
+void winner()
+{
+  int final_level = current_sequence;
+  button_1.on();
+  button_2.on();
+  play_filename(2, 5);
+  delay(1500);
+  button_1.off();
+  button_2.off();
+  current_sequence = 0;
+  mode = PENDING_MODE;
+  user_index = 0;
+  pixels.clear();
+  pixels.show();
+
+  // write to firebase
+  firebaseWrite(current_user,final_level);
 }

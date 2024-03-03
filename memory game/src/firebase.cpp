@@ -1,16 +1,18 @@
 #include "firebase.h"
 #include <ESP32Firebase.h>
 #include <Arduino.h>
-#define _SSID "shaza"          // Your WiFi SSID
+#include <Adafruit_NeoPixel.h>
+#define _SSID "Mariam"          // Your WiFi SSID
 #define _PASSWORD "12345678"      // Your WiFi Password
 #define REFERENCE_URL "https://simon-game-4d363-default-rtdb.firebaseio.com/"  // Your Firebase project reference url
 
 Firebase firebase(REFERENCE_URL);
-
+extern int mode;
+extern Adafruit_NeoPixel pixels;
 
 void firebaseSetup()
 {
-    Serial.begin(9600);
+  Serial.begin(9600);
   // pinMode(LED_BUILTIN, OUTPUT);
   // digitalWrite(LED_BUILTIN, LOW);
   WiFi.mode(WIFI_STA);
@@ -38,49 +40,39 @@ void firebaseSetup()
   Serial.print(WiFi.localIP());
   Serial.println("/");
   // digitalWrite(LED_BUILTIN, HIGH);
-
-
 }
 
 void firebaseWrite(String user, int level)
 {
-    String user_path = user + "/level_" + String(level);
-    int gameNum = firebase.getInt(user_path);
-    firebase.setInt(user_path, ++gameNum);
+  bool flag = 1;
+  while(WiFi.status() != WL_CONNECTED) {
+    if(flag)
+    {
+      for(int i =0; i < 16; i++)
+      {
+        pixels.setPixelColor(i, pixels.Color(255, 103, 0));
+      }
+      pixels.show();
+    }
+    flag = 0;
+    delay(500);
+    Serial.print("-");
+  }
+  pixels.clear();
+  pixels.show();
+  Serial.print("user:");
+  Serial.println(user);
+  Serial.print("49,firebase:");
+  Serial.println(level);
+  String user_path = user + "/level_" + String(level);
+  int gameNum = firebase.getInt(user_path);
+  firebase.setInt(user_path, ++gameNum);
 }
 
 String firebaseReadUser()
 {
-    return firebase.getString("currentUser");
+  String user =  firebase.getString("currentUser");
+  Serial.print("Currentuser:");
+  Serial.println(user);
+  return user;
 }
-
-// //================================================================//
-// //================================================================//
-
-//   // Examples of setting String, integer and float values.
-//   firebase.setString("Example/setString", "It's Working");
-//   firebase.setInt("Example/setInt", 123);
-//   firebase.setFloat("Example/setFloat", 45.32);
-
-//   // Examples of pushing String, integer and float values.
-//   firebase.pushString("push", "Hello");
-//   firebase.pushInt("push", 789);
-//   firebase.pushFloat("push", 89.54);
-
-//   // Example of getting a String.
-//   String data1 = firebase.getString("Example/setString");
-//   Serial.print("Received String:\t");
-//   Serial.println(data1);
-
-//   // Example of getting an int.
-//   int data2 = firebase.getInt("Example/setInt");
-//   Serial.print("Received Int:\t\t");
-//   Serial.println(data2);
-
-//   // Example of getting a float.
-//   float data3 = firebase.getFloat("Example/setFloat");
-//   Serial.print("Received Float:\t\t");
-//   Serial.println(data3);
-
-//   // Example of data deletion.
-//   firebase.deleteData("Example");
