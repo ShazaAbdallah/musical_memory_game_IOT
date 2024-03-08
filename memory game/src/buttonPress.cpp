@@ -30,10 +30,11 @@ int buttonPress::loop()
 {
     // read the state of the pushbutton value:
   buttonState = digitalRead(buttonPin);
-
   if (buttonState == LOW) {
     if(id != sequences[user_index])
     {
+      Serial.print("is pressed...");
+      Serial.println(id);
       return -1;
     }
     set_volume(25);
@@ -84,6 +85,8 @@ bool buttonPress::isPressed()
   buttonState = digitalRead(buttonPin);
   if(buttonState == LOW)
   {
+    Serial.print("ispressed_____");
+    Serial.println(id);
     set_volume(25);
     play_filename(2, 7);
     // turn LED on:

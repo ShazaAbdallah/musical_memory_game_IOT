@@ -32,8 +32,8 @@ int game;
 int current_sequence;
 buttonPress button_1(5, 26, 1, 1);
 buttonPress button_2(27, 18, 2, 2);
-buttonPress button_3(5, 26, 3, 3);
-buttonPress button_4(27, 18, 4, 4);
+buttonPress button_3(21, 4, 3, 3);
+buttonPress button_4(22, 23, 4, 4);
 int sequences[MAX_SEQUENCE];
 int user_index;
 String current_user = "";
@@ -73,6 +73,8 @@ void setup()
 
 void setup1()
 {
+  pixels.clear();
+  pixels.show();
   current_sequence = 0;
   mode = PENDING_MODE;
   user_index = 0;
@@ -90,7 +92,6 @@ void setup2()
 void loop()
 {
   int current_game = digitalRead(SWITCH_PIN);
-
   if(current_game != game)
   {
     game = current_game;
@@ -118,8 +119,8 @@ void loop1()
 {
   if(mode == PENDING_MODE)
   {
-    //Serial.println("in pending");
-    if( button_1.isPressed() || button_2.isPressed() || button_3.isPressed() || button_4.isPressed())
+    Serial.println("in pending");
+    if( button_1.isPressed() || button_2.isPressed() || button_3.isPressed() || button_4.isPressed() )
     {
       mode = GAME_MODE;
     }
