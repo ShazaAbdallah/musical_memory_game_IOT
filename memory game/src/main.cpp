@@ -204,22 +204,27 @@ void loser()
   button_3.on();
   button_4.on();
   play_filename(2, 6);
+  for(int i =0; i < 16; i++)
+  {
+    pixels.setPixelColor(i, pixels.Color(255, 0, 0));
+  }
+  pixels.show();
   delay(1500);
-  button_1.off();
-  button_2.off();
-  button_3.off();
-  button_4.off();
   current_sequence = 0;
   mode = PENDING_MODE;
   user_index = 0;
-  pixels.clear();
-  pixels.show();
 
   // write to firebase
   if(final_level - 1 != 0)
   {
     firebaseWrite(current_user, final_level-1);
   }
+  button_1.off();
+  button_2.off();
+  button_3.off();
+  button_4.off();
+  pixels.clear();
+  pixels.show();
 }
 
 void winner()
