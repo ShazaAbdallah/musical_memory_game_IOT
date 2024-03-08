@@ -19,7 +19,7 @@
 Adafruit_NeoPixel pixels(NEO_NUMPIXELS, NEO_PIN, NEO_GRB + NEO_KHZ800);
 
 
-#define MAX_SEQUENCE 2
+#define MAX_SEQUENCE 16
 #define USER_MODE 1
 #define GAME_MODE 2
 #define PENDING_MODE 3
@@ -32,6 +32,8 @@ int game;
 int current_sequence;
 buttonPress button_1(5, 26, 1, 1);
 buttonPress button_2(27, 18, 2, 2);
+buttonPress button_3(5, 26, 3, 3);
+buttonPress button_4(27, 18, 4, 4);
 int sequences[MAX_SEQUENCE];
 int user_index;
 String current_user = "";
@@ -57,6 +59,8 @@ void setup()
   pixels.show();
   button_1.setup();
   button_2.setup();
+  button_3.setup();
+  button_4.setup();
   mp3_setup();
   pinMode(SWITCH_PIN, INPUT_PULLUP);
   game = digitalRead(SWITCH_PIN);
@@ -115,7 +119,7 @@ void loop1()
   if(mode == PENDING_MODE)
   {
     //Serial.println("in pending");
-    if( button_1.isPressed() || button_2.isPressed())
+    if( button_1.isPressed() || button_2.isPressed() || button_3.isPressed() || button_4.isPressed())
     {
       mode = GAME_MODE;
     }
@@ -125,7 +129,7 @@ void loop1()
     user_index = 0;
     if(current_sequence < MAX_SEQUENCE)
     {
-      int random_number = std::rand() % 2 + 1;
+      int random_number = std::rand() % 4 + 1;
       sequences[current_sequence] = random_number;
       pixels.setPixelColor(current_sequence, pixels.Color(0, 150, 0));
       current_sequence++;
@@ -142,6 +146,14 @@ void loop1()
           break;
         case 2:
           button_2.show();
+          delay(500);
+          break;
+        case 3:
+          button_3.show();
+          delay(500);
+          break;
+        case 4:
+          button_4.show();
           delay(500);
           break;
         default:
@@ -162,12 +174,14 @@ void loop1()
       mode = GAME_MODE;
       button_1.off();
       button_2.off();
+      button_3.off();
+      button_4.off();
       // giving some time before playing the next sequence 
       delay(200);
     }
     else if (mode = USER_MODE)
     {
-      int result = button_1.loop() + button_2.loop();
+      int result = button_1.loop() + button_2.loop() + button_3.loop() + button_4.loop();
       if(result < 0)
       {
         loser();
@@ -186,10 +200,14 @@ void loser()
   int final_level = current_sequence;
   button_1.on();
   button_2.on();
+  button_3.on();
+  button_4.on();
   play_filename(2, 6);
   delay(1500);
   button_1.off();
   button_2.off();
+  button_3.off();
+  button_4.off();
   current_sequence = 0;
   mode = PENDING_MODE;
   user_index = 0;
@@ -208,10 +226,14 @@ void winner()
   int final_level = current_sequence;
   button_1.on();
   button_2.on();
+  button_3.on();
+  button_4.on();
   play_filename(2, 5);
   delay(1500);
   button_1.off();
   button_2.off();
+  button_3.off();
+  button_4.off();
   current_sequence = 0;
   mode = PENDING_MODE;
   user_index = 0;
