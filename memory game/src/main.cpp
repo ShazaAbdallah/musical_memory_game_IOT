@@ -13,6 +13,7 @@
 
 #define NEO_PIN 19
 #define NEO_NUMPIXELS 16
+#define BRIGHTNESS    50  // Set initial brightness (0-255)
 #define SWITCH_PIN 33
 
 
@@ -55,6 +56,7 @@ void setup()
     clock_prescale_set(clock_div_1);
   #endif
   pixels.begin();
+  pixels.setBrightness(BRIGHTNESS); // Set initial brightness
   pixels.clear();
   pixels.show();
   button_1.setup();
@@ -69,6 +71,7 @@ void setup()
   }else{
     setup2();
   }
+  pixels.show();
 }
 
 void setup1()
