@@ -15,7 +15,9 @@ public:
     const int ledPin;
     int filename;
     int buttonState;
+    int prevButtonState;
     int id;
+    bool i_lost;
     //Adafruit_NeoPixel strip;
     buttonPress(const int buttonPin,const int ledPin, int filename, int id);
     void setup();

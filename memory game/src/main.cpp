@@ -31,13 +31,14 @@ Adafruit_NeoPixel pixels(NEO_NUMPIXELS, NEO_PIN, NEO_GRB + NEO_KHZ800);
 int mode;
 int game;
 int current_sequence;
-buttonPress button_1(5, 26, 1, 1);
-buttonPress button_2(27, 18, 2, 2);
-buttonPress button_3(21, 4, 3, 3);
+buttonPress button_1(5, 4, 1, 1);
+buttonPress button_2(27, 26, 2, 2);
+buttonPress button_3(21, 18, 3, 3);
 buttonPress button_4(22, 23, 4, 4);
 int sequences[MAX_SEQUENCE];
 int user_index;
 String current_user = "";
+bool one_pressed = false;
 
 void loser();
 void winner();
@@ -140,13 +141,14 @@ void loop1()
       pixels.show(); 
       Serial.print("steps: ");
       Serial.println(current_sequence);
+      delay(1000);
       for(int i = 0; i < current_sequence; i++)
       {
         switch (sequences[i])
         {
         case 1:
           button_1.show();
-          delay(500);
+          delay(1000-60*current_sequence);
           break;
         case 2:
           button_2.show();
@@ -186,6 +188,8 @@ void loop1()
     else if (mode = USER_MODE)
     {
       int result = button_1.loop() + button_2.loop() + button_3.loop() + button_4.loop();
+      // Serial.print("user_index = ");
+      // Serial.println(user_index);
       if(result < 0)
       {
         loser();
