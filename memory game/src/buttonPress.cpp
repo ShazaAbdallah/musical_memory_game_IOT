@@ -11,6 +11,7 @@
 extern int user_index;
 extern int sequences[];
 extern bool one_pressed;
+extern int game;
 
 void colorWipe(uint32_t color, int wait, Adafruit_NeoPixel* strip);
 
@@ -84,7 +85,7 @@ void colorWipe(uint32_t color, int wait, Adafruit_NeoPixel* strip) {
 void buttonPress::show()
 {
   set_volume(25);
-  Serial.print("pressed...");
+  Serial.print("show...");
   Serial.println(id);
   play_filename(3, filename);
   digitalWrite(ledPin, HIGH);
@@ -119,11 +120,15 @@ bool buttonPress::isPressed()
     digitalWrite(ledPin, LOW);
     //one_pressed = true;
     prevButtonState = buttonState;
+    if(game == 1)
+      return true;
   }
   if(buttonState == HIGH && prevButtonState == LOW){
     one_pressed = false;
     prevButtonState = buttonState;
-    return true;
+    Serial.println("--------------isPressed in if");
+    if(game == 0)
+      return true;
   }
   return false;
 }
@@ -152,6 +157,7 @@ int buttonPress::game2Loop()
       digitalWrite(ledPin, HIGH);
       prevButtonState = buttonState;
     }
+    return 5;
   }
   if(buttonState == HIGH && prevButtonState == LOW){
     Serial.print(id);
@@ -165,7 +171,6 @@ int buttonPress::game2Loop()
     one_pressed = false;
     digitalWrite(ledPin, LOW);
     prevButtonState = buttonState;
-    return 5;
   }
   return 0;
 }

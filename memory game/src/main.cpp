@@ -40,6 +40,8 @@ int sequences[MAX_SEQUENCE];
 int user_index;
 String current_user = "";
 bool one_pressed = false;
+unsigned long startTime;
+unsigned long elapsedTime;
 
 void loser();
 void winner();
@@ -91,6 +93,8 @@ void setup2()
   pixels.show();
   mode = PENDING_MODE;
   game2_level = 0;
+  elapsedTime = 0;
+  startTime = 0;
 }
 
 void loop()
@@ -216,50 +220,53 @@ void loop2()
       pixels.show(); 
       int random_number = std::rand() % 4 + 1;
       sequences[0] = random_number;
+      delay(1000);
       switch (random_number)
       {
         case 1:
           button_1.show();
-          delay(1000);
+          //delay(1000);
           break;
         case 2:
           button_2.show();
-          delay(1000);
+          //delay(1000);
           break;
         case 3:
           button_3.show();
-          delay(1000);
+          //delay(1000);
           break;
         case 4:
           button_4.show();
-          delay(1000);
+          //delay(1000);
           break;
         default:
           break;
       }
       mode = USER_MODE;
+      startTime = millis();
+      elapsedTime = 0;
     }else{
       winner();
     }
   }else if(mode == USER_MODE)
   {
-    unsigned long startTime = millis();
-    unsigned long elapsedTime = 0;
-    while (elapsedTime < 300) {
+    elapsedTime = millis() - startTime;
+    if (elapsedTime < 2000) {
       int result = button_1.game2Loop() + button_2.game2Loop() + button_3.game2Loop() + button_4.game2Loop();
+      Serial.printf("result = %d\n", result);
       if(result == 5){
         mode = GAME_MODE;
         game2_level++;
-        break;
       }
       else if(result != 0)
       {
         loser();
+        Serial.println("lost beuasue result != 0");
       }
-      elapsedTime = millis() - startTime;
     }
-    if(mode != GAME_MODE){
+    if(elapsedTime > 2000 && mode == USER_MODE){
       loser();
+      Serial.println("lost beuasue elapsed time");
     }
   }
 
@@ -317,6 +324,10 @@ void winner()
   button_4.on();
   play_filename(2, 5);
   delay(1500);
+
+  // write to firebase
+  firebaseWrite(current_user,final_level);
+
   button_1.off();
   button_2.off();
   button_3.off();
@@ -327,7 +338,4 @@ void winner()
   user_index = 0;
   pixels.clear();
   pixels.show();
-
-  // write to firebase
-  firebaseWrite(current_user,final_level);
 }
