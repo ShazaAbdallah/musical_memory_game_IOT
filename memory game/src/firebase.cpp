@@ -9,6 +9,7 @@
 Firebase firebase(REFERENCE_URL);
 extern int mode;
 extern Adafruit_NeoPixel pixels;
+extern int game;
 
 void firebaseSetup()
 {
@@ -71,7 +72,8 @@ void firebaseWrite(String user, int level)
   Serial.println(user);
   Serial.print("49,firebase:");
   Serial.println(level);
-  String user_path = user + "/level_" + String(level);
+  String game_name = (game == 0) ? "/memory_game" : "/speed_game";
+  String user_path = user + game_name + "/level_" + String(level);
   int gameNum = firebase.getInt(user_path);
   firebase.setInt(user_path, ++gameNum);
 }

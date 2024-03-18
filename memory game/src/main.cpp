@@ -31,6 +31,7 @@ Adafruit_NeoPixel pixels(NEO_NUMPIXELS, NEO_PIN, NEO_GRB + NEO_KHZ800);
 int mode;
 int game;
 int current_sequence;
+int game2_level;
 buttonPress button_1(5, 4, 1, 1);
 buttonPress button_2(27, 26, 2, 2);
 buttonPress button_3(21, 18, 3, 3);
@@ -86,11 +87,10 @@ void setup1()
 
 void setup2()
 {
-  for(int i =0; i < 16; i++)
-  {
-    pixels.setPixelColor(i, pixels.Color(255, 0, 255));
-  }
+  pixels.clear();
   pixels.show();
+  mode = PENDING_MODE;
+  game2_level = 0;
 }
 
 void loop()
@@ -200,12 +200,73 @@ void loop1()
 
 void loop2()
 {
+  if(mode == PENDING_MODE)
+  {
+    Serial.println("in pending");
+    if( button_1.isPressed() || button_2.isPressed() || button_3.isPressed() || button_4.isPressed() )
+    {
+      mode = GAME_MODE;
+    }
+  }
+  else if(mode == GAME_MODE)
+  {
+    if(game2_level < MAX_SEQUENCE)
+    {
+      pixels.setPixelColor(game2_level, pixels.Color(0, 150, 0));
+      pixels.show(); 
+      int random_number = std::rand() % 4 + 1;
+      sequences[0] = random_number;
+      switch (random_number)
+      {
+        case 1:
+          button_1.show();
+          delay(1000);
+          break;
+        case 2:
+          button_2.show();
+          delay(1000);
+          break;
+        case 3:
+          button_3.show();
+          delay(1000);
+          break;
+        case 4:
+          button_4.show();
+          delay(1000);
+          break;
+        default:
+          break;
+      }
+      mode = USER_MODE;
+    }else{
+      winner();
+    }
+  }else if(mode == USER_MODE)
+  {
+    unsigned long startTime = millis();
+    unsigned long elapsedTime = 0;
+    while (elapsedTime < 300) {
+      int result = button_1.game2Loop() + button_2.game2Loop() + button_3.game2Loop() + button_4.game2Loop();
+      if(result == 5){
+        mode = GAME_MODE;
+        game2_level++;
+        break;
+      }
+      else if(result != 0)
+      {
+        loser();
+      }
+      elapsedTime = millis() - startTime;
+    }
+    if(mode != GAME_MODE){
+      loser();
+    }
+  }
 
 }
 
 void loser()
 {
-  int final_level = current_sequence;
   button_1.on();
   button_2.on();
   button_3.on();
@@ -217,15 +278,28 @@ void loser()
   }
   pixels.show();
   delay(1500);
-  current_sequence = 0;
-  mode = PENDING_MODE;
-  user_index = 0;
 
-  // write to firebase
-  if(final_level - 1 != 0)
+  mode = PENDING_MODE;
+
+  if(game == SIMON_GAME)
   {
-    firebaseWrite(current_user, final_level-1);
+    int final_level = current_sequence;
+    current_sequence = 0;
+    user_index = 0;
+    // write to firebase
+    if(final_level - 1 != 0)
+    {
+      firebaseWrite(current_user, final_level-1);
+    }
+  }else if(game == SPEED_GAME)
+  {
+    if(game2_level != 0)
+    {
+      firebaseWrite(current_user, game2_level);
+    }
+    game2_level = 0;
   }
+
   button_1.off();
   button_2.off();
   button_3.off();
@@ -236,7 +310,7 @@ void loser()
 
 void winner()
 {
-  int final_level = current_sequence;
+  int final_level = (game == SIMON_GAME) ? current_sequence : game2_level;
   button_1.on();
   button_2.on();
   button_3.on();
@@ -248,6 +322,7 @@ void winner()
   button_3.off();
   button_4.off();
   current_sequence = 0;
+  game2_level = 0;
   mode = PENDING_MODE;
   user_index = 0;
   pixels.clear();

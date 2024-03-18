@@ -26,6 +26,7 @@ public:
     void off();
     void on();
     bool isPressed();
+    int game2Loop();
     ~buttonPress() = default;
 };
 

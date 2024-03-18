@@ -127,3 +127,45 @@ bool buttonPress::isPressed()
   }
   return false;
 }
+
+int buttonPress::game2Loop()
+{
+  // read the state of the pushbutton value:
+  buttonState = digitalRead(buttonPin);
+  //dont remove!! needed for delay.
+  Serial.printf("buttom %d state = %d, prev = %d\n", id,buttonState,prevButtonState);
+  if (!one_pressed && buttonState == LOW && prevButtonState == HIGH) {
+    Serial.print("is pressed...");
+    Serial.println(id);
+    if(id != sequences[0])
+    {
+      Serial.print(id);
+      Serial.println(" is lost-----");
+      prevButtonState = buttonState;
+      i_lost = true;
+    }
+    if(!i_lost){
+      one_pressed = true;
+      set_volume(25);
+      play_filename(3, filename);
+      // turn LED on:
+      digitalWrite(ledPin, HIGH);
+      prevButtonState = buttonState;
+    }
+  }
+  if(buttonState == HIGH && prevButtonState == LOW){
+    Serial.print(id);
+    Serial.println(" is incide----------------------");
+    // turn LED off:
+    if(i_lost){
+      prevButtonState = buttonState;
+      i_lost = false;
+      return -1;
+    }
+    one_pressed = false;
+    digitalWrite(ledPin, LOW);
+    prevButtonState = buttonState;
+    return 5;
+  }
+  return 0;
+}
