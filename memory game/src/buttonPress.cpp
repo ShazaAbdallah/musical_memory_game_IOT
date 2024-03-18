@@ -33,6 +33,8 @@ int buttonPress::loop()
 {
   // read the state of the pushbutton value:
   buttonState = digitalRead(buttonPin);
+  //dont remove!! needed for delay.
+  Serial.printf("buttom %d state = %d, prev = %d\n", id,buttonState,prevButtonState);
   if (!one_pressed && buttonState == LOW && prevButtonState == HIGH) {
     Serial.print("is pressed...");
     Serial.println(id);
