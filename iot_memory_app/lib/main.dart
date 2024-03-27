@@ -4,7 +4,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'userInfo.dart';
 import 'userPage.dart';
-import 'colors.dart';
 
 String url = "https://simon-game-4d363-default-rtdb.firebaseio.com/";
 late FirebaseApp iot_app;
