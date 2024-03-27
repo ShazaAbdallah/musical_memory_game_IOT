@@ -20,7 +20,7 @@
 Adafruit_NeoPixel pixels(NEO_NUMPIXELS, NEO_PIN, NEO_GRB + NEO_KHZ800);
 
 
-#define MAX_SEQUENCE 16
+#define MAX_SEQUENCE 6
 #define USER_MODE 1
 #define GAME_MODE 2
 #define PENDING_MODE 3
@@ -80,6 +80,13 @@ void setup()
 
 void setup1()
 {
+  for(int i =0; i < 16; i++)
+  {
+    pixels.setPixelColor(i, pixels.Color(125, 249, 255));
+  }
+  pixels.show();
+  delay(500);
+  current_user = firebaseReadUser();
   pixels.clear();
   pixels.show();
   current_sequence = 0;
@@ -89,6 +96,13 @@ void setup1()
 
 void setup2()
 {
+  for(int i =0; i < 16; i++)
+  {
+    pixels.setPixelColor(i, pixels.Color(159, 43, 104));
+  }
+  pixels.show();
+  delay(500);
+  current_user = firebaseReadUser();
   pixels.clear();
   pixels.show();
   mode = PENDING_MODE;
@@ -140,9 +154,24 @@ void loop1()
     {
       int random_number = std::rand() % 4 + 1;
       sequences[current_sequence] = random_number;
+      for(int i = 0 ; i <current_sequence; i++)
+      {
+        pixels.setPixelColor(i, pixels.Color(0, 150, 0));
+        pixels.show();
+      }
+      for(int i = 0; i<3; i++)
+      {
+        pixels.setPixelColor(current_sequence, pixels.Color(0, 150, 0));
+        delay(100);
+        pixels.show();
+        pixels.setPixelColor(current_sequence, pixels.Color(0, 0, 0));
+        delay(100);
+        pixels.show(); 
+      }
       pixels.setPixelColor(current_sequence, pixels.Color(0, 150, 0));
+      pixels.show();
       current_sequence++;
-      pixels.show(); 
+      
       Serial.print("steps: ");
       Serial.println(current_sequence);
       delay(1000);
@@ -179,6 +208,8 @@ void loop1()
   }
   else if( mode == USER_MODE)
   {
+    pixels.clear();
+    pixels.show();
     if(user_index >= current_sequence)
     {
       mode = GAME_MODE;
@@ -323,6 +354,12 @@ void winner()
   button_3.on();
   button_4.on();
   play_filename(2, 5);
+    for(int i =0; i < 16; i++)
+  {
+    pixels.setPixelColor(i, pixels.Color(0, 255, 0));
+  }
+  pixels.show();
+  delay(1500);
   delay(1500);
 
   // write to firebase

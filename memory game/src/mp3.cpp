@@ -72,5 +72,29 @@ void play_filename(int8_t directory, int8_t file) {
   byte file_ind = file;
   MP3.write(file_ind);
   MP3.write(end_byte);
+  mp3_read();
   delay(20);  //required for stability
+}
+
+void mp3_read()
+{
+    if (MP3.available()) {
+    Serial.println("Received data from MP3 player:");
+    
+    while (MP3.available()) {
+      char receivedByte = MP3.read();
+
+      // Print each byte in hexadecimal format
+      Serial.print("0x");
+      if (receivedByte < 0x10) {
+        Serial.print("0"); // Print leading zero for single digit
+      }
+      Serial.print(receivedByte, HEX);
+      Serial.print(" ");
+    }
+    Serial.println(); // Print a newline after printing the buffer
+  }
+
+  // Other loop tasks
+
 }

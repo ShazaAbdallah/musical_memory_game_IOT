@@ -17,6 +17,7 @@ static char reset_CMD[] = { 0x7e, 0x03, 0X35, 0x05, 0xef };
 void mp3_setup();
 bool reset_mp3();
 void select_SD_card();
+void mp3_read();
 void set_volume(byte volume);
 void play_filename(int8_t directory, int8_t file);
 

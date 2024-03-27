@@ -89,7 +89,14 @@ void buttonPress::show()
   Serial.println(id);
   play_filename(3, filename);
   digitalWrite(ledPin, HIGH);
-  delay(500);
+  if(game == 0)
+  {
+    delay(500);
+  }
+  else
+  {
+    delay(250);
+  }
   digitalWrite(ledPin, LOW);
 }
 
@@ -147,27 +154,24 @@ int buttonPress::game2Loop()
       Serial.print(id);
       Serial.println(" is lost-----");
       prevButtonState = buttonState;
-      i_lost = true;
+      delay(100);
+      digitalWrite(ledPin, LOW);
+      return -1;
     }
-    if(!i_lost){
       one_pressed = true;
       set_volume(25);
       play_filename(3, filename);
       // turn LED on:
       digitalWrite(ledPin, HIGH);
       prevButtonState = buttonState;
-    }
+      delay(100);
+      digitalWrite(ledPin, LOW);
     return 5;
   }
   if(buttonState == HIGH && prevButtonState == LOW){
     Serial.print(id);
     Serial.println(" is incide----------------------");
     // turn LED off:
-    if(i_lost){
-      prevButtonState = buttonState;
-      i_lost = false;
-      return -1;
-    }
     one_pressed = false;
     digitalWrite(ledPin, LOW);
     prevButtonState = buttonState;
