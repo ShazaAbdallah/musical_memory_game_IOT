@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "101135552837",
+    "firebase_url": "https://simon-game-4d363-default-rtdb.firebaseio.com",
+    "project_id": "simon-game-4d363",
+    "storage_bucket": "simon-game-4d363.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:101135552837:android:fe4929dd9ab2cbf3b72e2c",
+        "android_client_info": {
+          "package_name": "com.example.iot_memory_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCs18ak2a6EwziHC2kdWq7JX-mbq3nya8c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
