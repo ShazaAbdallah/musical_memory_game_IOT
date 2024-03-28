@@ -4,8 +4,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 import 'userInfo.dart';
 import 'userPage.dart';
+import 'memory.dart';
+import 'memory_guide.dart';
+import 'speed.dart';
+import 'speed_guide.dart';
 
-String url = "https://simon-game-4d363-default-rtdb.firebaseio.com/";
 late FirebaseApp iot_app;
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,6 +33,10 @@ class MyApp extends StatelessWidget {
         routes: {
           '/': (context) =>  const MyHomePage(),
           '/user' : (context) => UserPage(),
+          '/user/memory' : (context) => memoryGame(),
+          '/user/memoryGuide' : (context) => memoryGuide(),
+          '/user/speed' : (context) => speedGame(),
+          '/user/speedGuide' : (context) => speedGuide(),
         }
       )
     );
@@ -180,13 +187,23 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
                         Container(
                           height: MediaQuery.of(context).size.height * 0.07,
-                          child: Text(
-                            'Musical Memory Game',
-                            style: TextStyle(
-                              color: Colors.deepPurple[400], // Custom color
-                              fontWeight: FontWeight.bold,
-                              fontSize: 26,
-                            )
+                          child: RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: 'Musical',
+                                style: TextStyle(color: Colors.pink[700], fontWeight: FontWeight.bold, fontSize: 26),
+                                ),
+                                TextSpan(
+                                text: ' Memory',
+                                style: TextStyle(color: Colors.orange[800], fontWeight: FontWeight.bold, fontSize: 26),
+                                ),
+                                TextSpan(
+                                text: ' Game',
+                                style: TextStyle(color: Colors.lightBlue[700], fontWeight: FontWeight.bold, fontSize: 26),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
 
