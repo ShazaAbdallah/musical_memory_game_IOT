@@ -34,9 +34,9 @@ class MyApp extends StatelessWidget {
           '/': (context) =>  const MyHomePage(),
           '/user' : (context) => UserPage(),
           '/user/memory' : (context) => memoryGame(),
-          '/user/memoryGuide' : (context) => memoryGuide(),
+          // '/user/memoryGuide' : (context) => memoryGuide(),
           '/user/speed' : (context) => speedGame(),
-          '/user/speedGuide' : (context) => speedGuide(),
+          // '/user/speedGuide' : (context) => speedGuide(),
         }
       )
     );
@@ -167,10 +167,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       backgroundColor: Colors.deepPurple[50],
       appBar: AppBar(
         backgroundColor: Colors.deepPurple[100],
-        title:  Text('Log In',
-            style: TextStyle(
-              color: Colors.deepPurple[400],
-              fontWeight: FontWeight.bold)),
       ),
 
       body:SingleChildScrollView(

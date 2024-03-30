@@ -96,7 +96,7 @@ class _UserPageState extends State<UserPage> {
                           height: 150.0,
                 ),
                 GestureDetector(
-                  onTap: () { Navigator.of(context).pushNamed('/user/speedGuide');},
+                  onTap: () { _showSpeedDialog(context);},
                   child: Container(
                           width: MediaQuery.of(context).size.width*0.45,
                           height: MediaQuery.of(context).size.width*0.45,
@@ -118,7 +118,7 @@ class _UserPageState extends State<UserPage> {
             Row(
               children: [
                 GestureDetector(
-                  onTap: () { Navigator.of(context).pushNamed('/user/memoryGuide');},
+                  onTap: () { _showMemoryDialog(context);},
                   child: Container(
                           width: MediaQuery.of(context).size.width*0.45,
                           height: MediaQuery.of(context).size.width*0.45,
@@ -209,4 +209,229 @@ class _UserPageState extends State<UserPage> {
       },
     );
   }
+
+    void _showMemoryDialog(BuildContext context) {
+      showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Close'),
+            ),
+          ],
+          content: Column(
+            children:  <Widget>[
+            Container(
+              height: MediaQuery.of(context).size.height * 0.03,
+            ),
+
+            Text('Memory Game',
+            style: TextStyle(color: Colors.lightBlue[700], fontWeight: FontWeight.bold, fontSize: 35),
+            ),
+
+            Text('Guide',
+            style: TextStyle(color: Colors.yellow[700], fontWeight: FontWeight.bold, fontSize: 35),
+            ),
+
+            Container(
+                height: 20,
+            ),
+
+            Row(
+              children: [
+                  Container(
+                    width: 20,
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Aim Of The Game:\n',
+                          style: TextStyle(color: Colors.lightBlue[700], fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                          TextSpan(
+                          text: 'Test your memory',
+                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
+                        ],
+                      ),
+                    ),
+              ]
+            ),
+
+            Container(
+              height: 20,
+            ),
+            Row(
+              children: [
+                  Container(
+                    width: 20,
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'How To Play:\n',
+                          style: TextStyle(color: Colors.lightBlue[700], fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                          TextSpan(
+                          text: '1. Switch to Memory Game.\n',
+                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          TextSpan(
+                          text: '2. Wait for the ring to Turn off.\n',
+                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          TextSpan(
+                          text: '3. GAME STARTED\n     starting with a sequence\n     of one press.\n',
+                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          TextSpan(
+                          text: '4. press the buttons in order\n',
+                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          TextSpan(
+                          text: 'The game will add a step\n in each level,\n so stay focused!\n',
+                          style: TextStyle(color: Colors.lightBlue[700], fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          TextSpan(
+                          text: 'If you miss a press, GAME OVER\n',
+                          style: TextStyle(color: Colors.red[600], fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          TextSpan(
+                          text: 'Keep it up untill level 16\n',
+                          style: TextStyle(color: Colors.yellow[700], fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          TextSpan(
+                          text: 'We Have A WINNER\n',
+                          style: TextStyle(color: Colors.green[600], fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    ),
+              ]
+            ),
+            
+          ],
+          )
+        );
+      }
+      );
+    }
+
+    void _showSpeedDialog(BuildContext context) {
+      showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Close'),
+            ),
+          ],
+          content: Column(
+            children:  <Widget>[
+              Container(
+              height: MediaQuery.of(context).size.height * 0.03,
+            ),
+
+            Text('Speed Game',
+            style: TextStyle(color: Colors.pink[700], fontWeight: FontWeight.bold, fontSize: 35),
+            ),
+
+            Text('Guide',
+            style: TextStyle(color: Colors.orange[700], fontWeight: FontWeight.bold, fontSize: 35),
+            ),
+
+            Container(
+                height: 20,
+            ),
+
+            Row(
+              children: [
+                  Container(
+                    width: 20,
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'Aim Of The Game:\n',
+                          style: TextStyle(color: Colors.orange[800], fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                          TextSpan(
+                          text: 'Press the lit button\nas quickly as possible',
+                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
+                          ),
+                        ],
+                      ),
+                    ),
+              ]
+            ),
+
+            Container(
+              height: 20,
+            ),
+            Row(
+              children: [
+                  Container(
+                    width: 20,
+                  ),
+                  RichText(
+                    text: TextSpan(
+                      children: [
+                        TextSpan(
+                          text: 'How To Play:\n',
+                          style: TextStyle(color: Colors.orange[700], fontWeight: FontWeight.bold, fontSize: 20),
+                          ),
+                          TextSpan(
+                          text: '1. Switch to Speed Game.\n',
+                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          TextSpan(
+                          text: '2. Wait for the ring to Turn off.\n',
+                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          TextSpan(
+                          text: '3. GAME STARTED\n     Look for the button that is lit.\n',
+                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          TextSpan(
+                          text: '4. Quickly press the lit button\n',
+                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          TextSpan(
+                          text: 'The game will get faster,\n so stay focused!\n',
+                          style: TextStyle(color: Colors.pink[700], fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          TextSpan(
+                          text: 'If you miss a press, GAME OVER\n',
+                          style: TextStyle(color: Colors.red[600], fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          TextSpan(
+                          text: 'Keep it up untill level 16\n',
+                          style: TextStyle(color: Colors.orange[700], fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          TextSpan(
+                          text: 'We Have A WINNER\n',
+                          style: TextStyle(color: Colors.green[600], fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                        ],
+                      ),
+                    ),
+              ]
+            ),
+            ],
+          )
+        );
+      }
+      );
+    }
 }

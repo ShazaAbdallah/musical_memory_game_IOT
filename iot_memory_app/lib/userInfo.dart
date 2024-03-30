@@ -102,8 +102,8 @@ class AuthRepository with ChangeNotifier {
       score = user_data['speed_game']?[level] ?? 0;
       _speed_data[level] = score;
     }
-    _fast = user_data['speed_game']['fast'];
-    _slow = user_data['speed_game']['slow'];
+    _fast = user_data['speed_game']['fast'] ?? 0;
+    _slow = user_data['speed_game']['slow'] ?? 0;
     user_data?['memory_game'] = _memory_data;
     user_data?['speed_game'] = _speed_data;
     print(user_data);
