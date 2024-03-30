@@ -5,9 +5,7 @@ import 'package:provider/provider.dart';
 import 'userInfo.dart';
 import 'userPage.dart';
 import 'memory.dart';
-import 'memory_guide.dart';
 import 'speed.dart';
-import 'speed_guide.dart';
 
 late FirebaseApp iot_app;
 void main() async{
@@ -19,7 +17,6 @@ void main() async{
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
 
   Widget build(BuildContext context) {
@@ -34,9 +31,7 @@ class MyApp extends StatelessWidget {
           '/': (context) =>  const MyHomePage(),
           '/user' : (context) => UserPage(),
           '/user/memory' : (context) => memoryGame(),
-          // '/user/memoryGuide' : (context) => memoryGuide(),
           '/user/speed' : (context) => speedGame(),
-          // '/user/speedGuide' : (context) => speedGuide(),
         }
       )
     );
@@ -73,7 +68,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     super.initState();
     animationController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1000), // Duration of the animation
+      duration: const Duration(milliseconds: 1000),
     );
     _animation = Tween<double>(begin: 0.0, end: 1.0).animate(animationController);
   }
@@ -87,7 +82,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     final authRepository = Provider.of<AuthRepository>(context,  listen : false);
 
     if (!_isLogin) {
-      /// sign up
       if (confirmController.text == passwordController.text) {
         setState(() {
           _isLoading = true;
@@ -100,7 +94,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
           if (!mounted) return;
           if (isSuccess != null) {
             ScaffoldMessenger.of(context).showSnackBar(snackBarSignUpSuccess);
-            // After successful sign up, directly log in the user.
             await authRepository.signIn(
               userNameController.text.trim(),
               passwordController.text,
@@ -234,7 +227,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                               ),
                             ),
                             onEditingComplete: () {
-                              FocusScope.of(context).nextFocus(); // Move focus to the next field
+                              FocusScope.of(context).nextFocus();
                             },
                           ),
                         ),

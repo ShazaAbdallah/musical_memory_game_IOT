@@ -10,19 +10,11 @@ enum Status { Uninitialized, Authenticated, Authenticating, Unauthenticated }
 
 class AuthRepository with ChangeNotifier {
   String _userName = "";
-  Map _memory_data = {};
-  Map _speed_data = {};
-  int _fast = 0;
-  int _slow = 0;
   Status _status = Status.Uninitialized;
   DatabaseReference _db;
   final FirebaseAuth _auth;
   User? _user;
 
-  Map get memory_data => _memory_data;
-  int get fast => _fast;
-  int get slow => _slow;
-  Map get speed_data => _speed_data;
   Status get status => _status;
   User? get user => _user;
   String get userName => _userName;
@@ -76,7 +68,6 @@ class AuthRepository with ChangeNotifier {
           password: password
       );
       _userName = username;
-      await getData();
       await setCurrentUser();
       notifyListeners();
       return true;
@@ -84,43 +75,15 @@ class AuthRepository with ChangeNotifier {
       print(e);
       _status = Status.Unauthenticated;
       notifyListeners();
-      throw 'Error signing in: $e'; // Throw the error message
+      throw 'Error signing in: $e';
     }
   }
-
-  Future getData() async {
-  try {
-    Map<dynamic, dynamic>? user_data = (await _db.child(_userName)
-        .once()
-        .then((result) => result.snapshot.value)) as Map<dynamic, dynamic>?;
-    if(user_data == null) user_data = {};
-    int score = 0;
-    for (var i = 1; i <= 16; i++) {
-      String level = 'level_$i';
-      score = user_data['memory_game']?[level] ?? 0;
-      _memory_data[level] = score;
-      score = user_data['speed_game']?[level] ?? 0;
-      _speed_data[level] = score;
-    }
-    _fast = user_data['speed_game']['fast'] ?? 0;
-    _slow = user_data['speed_game']['slow'] ?? 0;
-    user_data?['memory_game'] = _memory_data;
-    user_data?['speed_game'] = _speed_data;
-    print(user_data);
-    print('fast = $_fast and slow = $_slow');
-    notifyListeners();
-  } catch (e) {
-    throw('Error fetching data: $e');
-  }
-}
 
   Future setCurrentUser({String name = ""}) async {
     if (name == "") name = _userName;
     try {
-      print('status is :$_status\n');
       DatabaseReference reference = FirebaseDatabase.instance.reference().child('currentUser');
       await reference.set(name).then((_) {
-        print('Data set successfully');
       });
     } catch (e) {
       print(e);
@@ -138,6 +101,10 @@ class AuthRepository with ChangeNotifier {
       print(e);
       throw 'Error signing out: $e';
     }
+  }
+
+  Stream<DatabaseEvent> getDataStream(){
+    return _db.child('$_userName').onValue;
   }
 }
 

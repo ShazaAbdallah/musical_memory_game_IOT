@@ -115,8 +115,27 @@ class _UserPageState extends State<UserPage> {
                       width: 150.0,
                       height: 50.0,
             ),
+            
             Row(
               children: [
+               GestureDetector(
+                  onTap: () { Navigator.of(context).pushNamed('/user/memory');},
+                  child: Container(
+                          width: MediaQuery.of(context).size.width*0.45,
+                          height: MediaQuery.of(context).size.width*0.45,
+                          decoration: const BoxDecoration(
+                            image:  DecorationImage(
+                              image:  AssetImage('assets/blue.png'),
+                              fit: BoxFit.fill,
+                            ),
+                          ),
+                        ),
+                ),
+
+                Container(
+                          width: MediaQuery.of(context).size.width*0.1,
+                          height: 150.0,
+                ),
                 GestureDetector(
                   onTap: () { _showMemoryDialog(context);},
                   child: Container(
@@ -125,23 +144,6 @@ class _UserPageState extends State<UserPage> {
                           decoration: const BoxDecoration(
                             image:  DecorationImage(
                               image:  AssetImage('assets/yellow.png'),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        ),
-                ),
-                Container(
-                          width: MediaQuery.of(context).size.width*0.1,
-                          height: 150.0,
-                ),
-                GestureDetector(
-                  onTap: () { Navigator.of(context).pushNamed('/user/memory');},
-                  child: Container(
-                          width: MediaQuery.of(context).size.width*0.45,
-                          height: MediaQuery.of(context).size.width*0.45,
-                          decoration: const BoxDecoration(
-                            image:  DecorationImage(
-                              image:  AssetImage('assets/blue.png'),
                               fit: BoxFit.fill,
                             ),
                           ),
