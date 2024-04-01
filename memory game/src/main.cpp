@@ -20,7 +20,7 @@
 Adafruit_NeoPixel pixels(NEO_NUMPIXELS, NEO_PIN, NEO_GRB + NEO_KHZ800);
 
 
-#define MAX_SEQUENCE 6
+#define MAX_SEQUENCE 16
 #define USER_MODE 1
 #define GAME_MODE 2
 #define PENDING_MODE 3
@@ -42,6 +42,7 @@ String current_user = "";
 bool one_pressed = false;
 unsigned long startTime;
 unsigned long elapsedTime;
+unsigned long speed_time = 0;
 
 void loser();
 void winner();
@@ -76,6 +77,8 @@ void setup()
     setup2();
   }
   pixels.show();
+
+  set_volume(5);
 }
 
 void setup1()
@@ -113,6 +116,36 @@ void setup2()
 
 void loop()
 {
+  // int sequences_1 [] = {1,2,3,2,1,4,2, 0, 0,0,0,0,0,0,0,0};
+  // delay(1000);
+  // for(int i = 0; i < 7; i++)
+  // {
+  //   switch (sequences_1[i])
+  //   {
+  //     case 1:
+  //     button_1.show();
+  //       //play_filename(3, 1);
+  //       delay(1000-60*current_sequence);
+  //       break;
+  //     case 2:
+  //     button_2.show();
+  //       //play_filename(3, 2);
+  //       delay(1000-60*current_sequence);
+  //       break;
+  //     case 3:
+  //     button_3.show();
+  //       //play_filename(3, 3);
+  //       delay(1000-60*current_sequence);
+  //       break;
+  //     case 4:
+  //     button_4.show();
+  //       //play_filename(3, 4);
+  //       delay(1000-60*current_sequence);
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // }
   int current_game = digitalRead(SWITCH_PIN);
   if(current_game != game)
   {
@@ -175,21 +208,22 @@ void loop1()
       Serial.print("steps: ");
       Serial.println(current_sequence);
       delay(1000);
+      int delay_ = (current_sequence >= 4) ? 100 : 500;
       for(int i = 0; i < current_sequence; i++)
       {
         switch (sequences[i])
         {
         case 1:
           button_1.show();
-          delay(1000-60*current_sequence);
+          delay(delay_);
           break;
         case 2:
           button_2.show();
-          delay(500);
+          delay(delay_);
           break;
         case 3:
           button_3.show();
-          delay(500);
+          delay(delay_);
           break;
         case 4:
           button_4.show();
@@ -251,7 +285,7 @@ void loop2()
       pixels.show(); 
       int random_number = std::rand() % 4 + 1;
       sequences[0] = random_number;
-      delay(1000);
+      delay(500);
       switch (random_number)
       {
         case 1:
@@ -282,12 +316,17 @@ void loop2()
   }else if(mode == USER_MODE)
   {
     elapsedTime = millis() - startTime;
-    if (elapsedTime < 2000) {
+    int runtime =  (game2_level <= 3)? 1500 : 500;
+    if (elapsedTime < runtime) 
+    {
       int result = button_1.game2Loop() + button_2.game2Loop() + button_3.game2Loop() + button_4.game2Loop();
       Serial.printf("result = %d\n", result);
       if(result == 5){
         mode = GAME_MODE;
         game2_level++;
+        speed_time += elapsedTime;
+        Serial.print("***************8speed_time = ");
+        Serial.println(speed_time);
       }
       else if(result != 0)
       {
@@ -295,7 +334,7 @@ void loop2()
         Serial.println("lost beuasue result != 0");
       }
     }
-    if(elapsedTime > 2000 && mode == USER_MODE){
+    if(elapsedTime > runtime && mode == USER_MODE){
       loser();
       Serial.println("lost beuasue elapsed time");
     }
@@ -335,7 +374,15 @@ void loser()
     {
       firebaseWrite(current_user, game2_level);
     }
+    if (speed_time < 0.5*500*game2_level)
+    {
+      firebaseWriteSpeed(current_user, 1);
+    }
+    else{
+      firebaseWriteSpeed(current_user, 0);
+    }
     game2_level = 0;
+    speed_time =0 ;
   }
 
   button_1.off();
@@ -364,13 +411,23 @@ void winner()
 
   // write to firebase
   firebaseWrite(current_user,final_level);
-
+  if(game == SPEED_GAME)
+  {
+    if (speed_time < 0.5*500*game2_level)
+    {
+      firebaseWriteSpeed(current_user, 1);
+    }
+    else{
+      firebaseWriteSpeed(current_user, 0);
+    }
+  }
   button_1.off();
   button_2.off();
   button_3.off();
   button_4.off();
   current_sequence = 0;
   game2_level = 0;
+  speed_time =0;
   mode = PENDING_MODE;
   user_index = 0;
   pixels.clear();

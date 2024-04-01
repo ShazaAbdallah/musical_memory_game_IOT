@@ -4,5 +4,6 @@
 
 void firebaseSetup();
 void firebaseWrite(String user, int level);
+void firebaseWriteSpeed(String user, int update);
 String firebaseReadUser();
 #endif
