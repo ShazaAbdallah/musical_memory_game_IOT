@@ -1,3 +1,132 @@
+// #include <Arduino.h>
+// #include <ArduinoJson.h>
+// /**
+//  * Based on code created by K. Suwatchai (Mobizt)
+//  * https://github.com/mobizt/Firebase-ESP-Client/blob/main/examples/RTDB/DataChangesListener/Callback/Callback.ino
+//  */
+
+// #if defined(ESP32)
+// #include <WiFi.h>
+// #elif defined(ESP8266)
+// #include <ESP8266WiFi.h>
+// #endif
+// //#include <nlohmann/json.hpp>
+
+
+// #include "secrets.h"
+
+// #include <Firebase_ESP_Client.h>
+
+// // Provide the token generation process info.
+// #include <addons/TokenHelper.h>
+
+// // Provide the RTDB payload printing info and other helper functions.
+// #include <addons/RTDBHelper.h>
+
+// // Define Firebase Data object
+// FirebaseData stream;
+// FirebaseData fbdo;
+// //using json = nlohmann::json;
+// FirebaseAuth auth;
+// FirebaseConfig config;
+
+
+
+
+// void setup()
+// {
+
+//   Serial.begin(9600);
+
+//   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+//   Serial.print("Connecting to Wi-Fi");
+//   while (WiFi.status() != WL_CONNECTED)
+//   {
+//     Serial.print(".");
+//     delay(300);
+//   }
+//   Serial.println();
+//   Serial.print("Connected with IP: ");
+//   Serial.println(WiFi.localIP());
+//   Serial.println();
+
+//   Serial.printf("Firebase Client v%s\n\n", FIREBASE_CLIENT_VERSION);
+
+//   /* Assign the api key (required) */
+//   config.api_key = API_KEY;
+
+//   /* Assign the user sign in credentials */
+//   auth.user.email = USER_EMAIL;
+//   auth.user.password = USER_PASSWORD;
+
+//   /* Assign the RTDB URL (required) */
+//   config.database_url = DATABASE_URL;
+
+//   // Or use legacy authenticate method
+//   // config.database_url = DATABASE_URL;
+//   // config.signer.tokens.legacy_token = "<database secret>";
+
+//   // To connect without auth in Test Mode, see Authentications/TestMode/TestMode.ino
+
+//   Firebase.begin(&config, &auth);
+
+//   Firebase.reconnectWiFi(true);
+
+// // Recommend for ESP8266 stream, adjust the buffer size to match your stream data size
+// #if defined(ESP8266)
+//   stream.setBSSLBufferSize(2048 /* Rx in bytes, 512 - 16384 */, 512 /* Tx in bytes, 512 - 16384 */);
+// #endif
+
+//   /** Timeout options, below is default config.
+
+//   //WiFi reconnect timeout (interval) in ms (10 sec - 5 min) when WiFi disconnected.
+//   config.timeout.wifiReconnect = 10 * 1000;
+
+//   //Socket begin connection timeout (ESP32) or data transfer timeout (ESP8266) in ms (1 sec - 1 min).
+//   config.timeout.socketConnection = 30 * 1000;
+
+//   //ESP32 SSL handshake in ms (1 sec - 2 min). This option doesn't allow in ESP8266 core library.
+//   config.timeout.sslHandshake = 2 * 60 * 1000;
+
+//   //Server response read timeout in ms (1 sec - 1 min).
+//   config.timeout.serverResponse = 10 * 1000;
+
+//   //RTDB Stream keep-alive timeout in ms (20 sec - 2 min) when no server's keep-alive event data received.
+//   config.timeout.rtdbKeepAlive = 45 * 1000;
+
+//   //RTDB Stream reconnect timeout (interval) in ms (1 sec - 1 min) when RTDB Stream closed and want to resume.
+//   config.timeout.rtdbStreamReconnect = 1 * 1000;
+
+//   //RTDB Stream error notification timeout (interval) in ms (3 sec - 30 sec). It determines how often the readStream
+//   //will return false (error) when it called repeatedly in loop.
+//   config.timeout.rtdbStreamError = 3 * 1000;
+
+//   */
+// }
+
+// void loop()
+// {
+
+//   Firebase.ready(); // should be called repeatedly to handle authentication tasks.
+// FirebaseJsonData result;
+// FirebaseJson json_2;
+// if(Firebase.RTDB.getJSON(&fbdo, "/shaza/speed_game", &json_2))
+// {
+//   String data = json_2.raw();
+//   JsonDocument doc;
+//   deserializeJson(doc,data);
+//   int fast = doc["fast"];
+  
+//   Serial.print(fast);
+// }
+
+//   FirebaseJson json;
+//   json.add("num", 120);
+//   Firebase.RTDB.setJSON(&fbdo, "/counter/data/json", &json);
+
+  
+// }
+
 #include <Arduino.h>
 #include "buttonPress.h"
 #include "mp3.h"
