@@ -66,6 +66,8 @@ void firebaseWrite(String user, int level)
     delay(500);
     Serial.print("-");
   }
+  Serial.print("wifi");
+  Serial.println(WiFi.status());
   pixels.clear();
   pixels.show();
   Serial.print("user:");
@@ -76,6 +78,46 @@ void firebaseWrite(String user, int level)
   String user_path = user + game_name + "/level_" + String(level);
   int gameNum = firebase.getInt(user_path);
   firebase.setInt(user_path, ++gameNum);
+}
+
+void firebaseWriteSpeed(String user, int update)
+{
+  bool flag = 1;
+  while(WiFi.status() != WL_CONNECTED) {
+    if(flag)
+    {
+      for(int i =0; i < 16; i++)
+      {
+        pixels.setPixelColor(i, pixels.Color(255, 103, 0));
+      }
+      pixels.show();
+    }
+    flag = 0;
+    delay(500);
+    Serial.print("-");
+  }
+  Serial.print("wifi");
+  Serial.println(WiFi.status());
+  pixels.clear();
+  pixels.show();
+  Serial.print("user:");
+  Serial.println(user);
+  Serial.print("49,firebase:");
+  Serial.println(update);
+  String user_path = user + "/speed_game" + "/last";
+  firebase.setInt(user_path, update);
+  if(update)
+  {
+    String user_path = user + "/speed_game" + "/fast";
+    int gameNum = firebase.getInt(user_path);
+    firebase.setInt(user_path, ++gameNum);
+  }
+  else
+  {
+    String user_path = user + "/speed_game" + "/slow";
+    int gameNum = firebase.getInt(user_path);
+    firebase.setInt(user_path, ++gameNum);
+  }
 }
 
 String firebaseReadUser()

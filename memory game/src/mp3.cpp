@@ -72,7 +72,15 @@ void play_filename(int8_t directory, int8_t file) {
   byte file_ind = file;
   MP3.write(file_ind);
   MP3.write(end_byte);
-  mp3_read();
+  //mp3_read();
+  //   if (MP3.available()) {
+  //   char incomingByte = MP3.read(); // Read incoming byte
+  //   Serial.print("incoming byts: ");
+  //   Serial.println(incomingByte); // Print the byte
+  // }
+  // else{
+  //   Serial.print("not availabe");
+  // }
   delay(20);  //required for stability
 }
 

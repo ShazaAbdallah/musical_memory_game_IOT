@@ -50,7 +50,7 @@ int buttonPress::loop()
     }
     if(!i_lost){
       one_pressed = true;
-      set_volume(25);
+      set_volume(15);
       play_filename(3, filename);
       // turn LED on:
       digitalWrite(ledPin, HIGH);
@@ -84,7 +84,7 @@ void colorWipe(uint32_t color, int wait, Adafruit_NeoPixel* strip) {
 
 void buttonPress::show()
 {
-  set_volume(25);
+  set_volume(15);
   Serial.print("show...");
   Serial.println(id);
   play_filename(3, filename);
@@ -118,7 +118,7 @@ bool buttonPress::isPressed()
   {
     Serial.print("ispressed_____");
     Serial.println(id);
-    set_volume(25);
+    set_volume(15);
     play_filename(2, 7);
     // turn LED on:
     digitalWrite(ledPin, HIGH);
@@ -159,12 +159,12 @@ int buttonPress::game2Loop()
       return -1;
     }
       one_pressed = true;
-      set_volume(25);
+      set_volume(15);
       play_filename(3, filename);
       // turn LED on:
       digitalWrite(ledPin, HIGH);
       prevButtonState = buttonState;
-      delay(100);
+      delay(500);
       digitalWrite(ledPin, LOW);
     return 5;
   }
@@ -175,6 +175,7 @@ int buttonPress::game2Loop()
     one_pressed = false;
     digitalWrite(ledPin, LOW);
     prevButtonState = buttonState;
+    //return 5;
   }
   return 0;
 }
