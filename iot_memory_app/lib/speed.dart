@@ -25,6 +25,7 @@ class _speedGameState extends State<speedGame> {
   double slow = 0;
   double max_y = 0;
   int last = 0;
+  int ave = 0;
   List<BarChartGroupData> barsData = [];
   LinearGradient get _barsGradient => LinearGradient(
         colors: [
@@ -41,8 +42,9 @@ class _speedGameState extends State<speedGame> {
     barsData = [];
     print(user_data);
     for (var i = 1; i <= 16; i++) {
-      if(user_data['speed_game']['level_$i'] != null){
+      if(user_data['speed_game']['level_$i'] != 0){
         total_games = total_games + user_data['speed_game']['level_$i'] as int;
+        ave += i*user_data['speed_game']['level_$i'] as int;
         if(i == 16) total_wins = user_data['speed_game']['level_$i'] as int;
         if(i > max_level) max_level = i;
         if(user_data['speed_game']['level_$i'].toDouble() > max_y) max_y = user_data['speed_game']['level_$i'].toDouble();
@@ -66,6 +68,26 @@ class _speedGameState extends State<speedGame> {
     int s = user_data['speed_game']['slow']as int ?? 0;
     fast = f.toDouble();
     slow = s.toDouble();
+    int level_0 = (fast+slow-total_games).toInt();
+    if(level_0 != 0) 
+    {
+      data['0'] = level_0.toDouble();
+      barsData.add(
+          BarChartGroupData(
+            x: 0,
+            barRods: [
+              BarChartRodData(
+                toY: data['0']!.toDouble(),
+                gradient: _barsGradient,
+              )
+            ],
+            showingTooltipIndicators: [0],
+          )
+        );
+    }
+    total_games = (slow+fast).toInt();
+    if(total_games!=0)
+      ave = (ave / total_games).toInt();
   }
 
   Widget getTitles(double value, TitleMeta meta) {
@@ -84,12 +106,15 @@ class _speedGameState extends State<speedGame> {
 
   @override
   Widget build(BuildContext context) {
+    final authRepository = Provider.of<AuthRepository>(context,  listen : false);
+    String user_name = authRepository.userName;
     double size = 32;
     return Scaffold(
       backgroundColor: Colors.pink[50],
       appBar: AppBar(
-      backgroundColor: Colors.pink[100],
-      iconTheme: IconThemeData(color: Colors.pink[700],),
+        title: Text("$user_name", style: TextStyle(color: Colors.deepPurple[700], fontWeight: FontWeight.bold),),
+        backgroundColor: Colors.pink[100],
+        iconTheme: IconThemeData(color: Colors.pink[700],),
       ),
       body: SingleChildScrollView(
         child: StreamBuilder(
@@ -107,7 +132,7 @@ class _speedGameState extends State<speedGame> {
               return Center(child: Text('No data available'));
             }
 
-            user_data = snapshot.data?.snapshot.value as Map<dynamic,dynamic>;
+            user_data = snapshot.data?.snapshot.value as Map<dynamic,dynamic> ;
             create_bars_list();
             return Column(
               children:  <Widget>[
@@ -120,13 +145,75 @@ class _speedGameState extends State<speedGame> {
                 ),
 
                 Text('Statistics',
-                style: TextStyle(color: Colors.orange[700], fontWeight: FontWeight.bold, fontSize: size),
+                style: TextStyle(color: Colors.deepPurple[700], fontWeight: FontWeight.bold, fontSize: size),
                 ),
 
                 Container(
                   height: MediaQuery.of(context).size.height * 0.02,
                 ),
+              Card(
+                color: Colors.white,
+                shadowColor: Colors.pink[700],
+                surfaceTintColor: Colors.white,
+                elevation: 10.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child:Column(
+                  children: [
+                    Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text('  Highest Score:',
+                          style: TextStyle(
+                            color: Colors.deepPurple[700],
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold
+                            ),),
+                    ),
+                    Align(
+                          alignment: Alignment.center,
+                          child: Text('$max_level',
+                          style: TextStyle(
+                            color: Colors.pink[700],
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold
+                            ),),
+                    ),
+                  ],
+                )
+              ),
 
+              Card(
+                  color: Colors.white,
+                  shadowColor: Colors.pink[700],
+                  surfaceTintColor: Colors.white,
+                  elevation: 10.0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child:Column(
+                    children: [
+                      Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text('  Average Score:',
+                            style: TextStyle(
+                              color: Colors.deepPurple[700],
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold
+                              ),),
+                      ),
+                      Align(
+                            alignment: Alignment.center,
+                            child: Text('$ave',
+                            style: TextStyle(
+                              color: Colors.pink[700],
+                              fontSize: 40,
+                              fontWeight: FontWeight.bold
+                              ),),
+                      ),
+                    ],
+                  )
+                ),
                 Card(
                   color: Colors.white,
                   shadowColor: Colors.pink[700],
@@ -136,55 +223,18 @@ class _speedGameState extends State<speedGame> {
                     borderRadius: BorderRadius.circular(20),
                   ),
                     child: Column(children: [
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.02,
-                    ),
                     Row(
                       children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.05,
-                        ),
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: Text('Total Games: $total_games',
+                          child: Text('   Total Games: $total_games',
                           style: TextStyle(
                             color: Colors.pink[700],
-                            fontSize: 20,
+                            fontSize: 18,
                             ),),
                         ),
                       ],
                     ),
-                    Row(
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.05,
-                        ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text('Total Wins: $total_wins',
-                          style: TextStyle(
-                            color: Colors.green[800],
-                            fontSize: 20,
-                            ),),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.05,
-                        ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text('Top Level: $max_level',
-                          style: TextStyle(
-                            color: Colors.orange[800],
-                            fontSize: 20,
-                            ),),
-                        ),
-                      ],
-                    ),
-
                     Container(
                         height: 200,
                         width: MediaQuery.of(context).size.width,
@@ -224,8 +274,6 @@ class _speedGameState extends State<speedGame> {
                                           ),
                                         ),
                                         leftTitles: AxisTitles(
-                                          axisNameSize: 25,
-                                          axisNameWidget: Text('Score', style: TextStyle(color: Colors.pink[700], fontWeight: FontWeight.bold),),
                                           sideTitles: SideTitles(showTitles: false),
                                         ),
                                         topTitles: const AxisTitles(
@@ -263,9 +311,12 @@ class _speedGameState extends State<speedGame> {
                         height: MediaQuery.of(context).size.height * 0.03,
                         child:Align(
                           alignment: Alignment.centerLeft,
-                          child: Text(last == 1 ? "   Wow! you were FAST in last Game" : "   Stay Focused, you were Slow in last Game",
-                            style: TextStyle(color: (last == 1 ? Colors.green[700] : Colors.pink),fontSize: 18)),                     
+                          child: Text(last == 1 ? "   Wow! you were FAST in last Game" : last == 0 ? "   Stay Focused, you were Slow in last Game" : "",
+                            style: TextStyle(color: (last == 1 ? Colors.green[900] : Colors.pink),fontWeight: FontWeight.bold,fontSize: 18)),                     
                         )
+                      ),
+                      Container(
+                        height: 10,
                       ),
                       Container(
                             width: MediaQuery.of(context).size.width * 0.05,

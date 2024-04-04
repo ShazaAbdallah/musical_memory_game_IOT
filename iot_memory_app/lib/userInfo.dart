@@ -47,6 +47,38 @@ class AuthRepository with ChangeNotifier {
           email: email,
           password: password
       );
+      try {
+        DatabaseReference reference = FirebaseDatabase.instance.reference().child('$username');
+        Map<dynamic,dynamic> map0 = {
+          'level_1':0,
+          'level_2':0,
+          'level_3':0,
+          'level_4':0,
+          'level_5':0,
+          'level_6':0,
+          'level_7':0,
+          'level_8':0,
+          'level_9':0,
+          'level_10':0,
+          'level_11':0,
+          'level_12':0,
+          'level_13':0,
+          'level_14':0,
+          'level_15':0,
+          'level_16':0,
+        };
+        Map<dynamic,dynamic> map1 = Map.from(map0);
+        map1['fast'] = 0;
+        map1['slow'] = 0;
+        map1['last'] = -1;
+        Map<dynamic,dynamic> map2 = {
+          'memory_game': map0,
+          'speed_game': map1};
+        await reference.set(map2).then((_) {});
+      } catch (e) {
+        print(e);
+        throw 'Error setCurrentUser: $e';
+      }
       _userName = username;
       notifyListeners();
       return userCredential;
@@ -68,6 +100,13 @@ class AuthRepository with ChangeNotifier {
           password: password
       );
       _userName = username;
+      DatabaseReference reference = FirebaseDatabase.instance.reference().child('currentUser');
+      await reference.get().then((DataSnapshot snapshot) {
+        final userData = snapshot.value;
+        if('None' != userData.toString()){
+          throw 'Another user already connected';
+        }
+      });
       await setCurrentUser();
       notifyListeners();
       return true;
@@ -103,7 +142,8 @@ class AuthRepository with ChangeNotifier {
     }
   }
 
-  Stream<DatabaseEvent> getDataStream(){
+  Stream<DatabaseEvent> getDataStream()
+  {
     return _db.child('$_userName').onValue;
   }
 }
