@@ -277,6 +277,10 @@ class _UserPageState extends State<UserPage> {
                           text: 'We Have A WINNER\n',
                           style: TextStyle(color: Colors.green[600], fontWeight: FontWeight.bold, fontSize: 16),
                           ),
+                          TextSpan(
+                          text: '6. Wait for all buttons to turn off\n     before starting a new game\n     data is being saved.\n',
+                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
                         ],
                       ),
                     ),
@@ -393,6 +397,10 @@ class _UserPageState extends State<UserPage> {
                           TextSpan(
                           text: 'We Have A WINNER\n',
                           style: TextStyle(color: Colors.green[600], fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          TextSpan(
+                          text: '5. Wait for all buttons to turn off\n     before starting a new game\n     data is being saved.\n',
+                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
                           ),
                         ],
                       ),
