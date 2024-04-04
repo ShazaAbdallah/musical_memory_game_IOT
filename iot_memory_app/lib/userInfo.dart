@@ -40,6 +40,7 @@ class AuthRepository with ChangeNotifier {
 
   Future<UserCredential?> signUp(String username, String password) async {
     try {
+      username = username.toLowerCase();
       _status = Status.Authenticating;
       final email ='$username@example.com';
       notifyListeners();
@@ -92,6 +93,7 @@ class AuthRepository with ChangeNotifier {
 
   Future<bool> signIn(String username, String password) async {
     try {
+      username = username.toLowerCase();
       _status = Status.Authenticating;
       notifyListeners();
       String email = '$username@example.com';
@@ -103,7 +105,7 @@ class AuthRepository with ChangeNotifier {
       DatabaseReference reference = FirebaseDatabase.instance.reference().child('currentUser');
       await reference.get().then((DataSnapshot snapshot) {
         final userData = snapshot.value;
-        if('None' != userData.toString()){
+        if('None' != userData.toString() && username != userData.toString()){
           throw 'Another user already connected';
         }
       });
@@ -144,6 +146,7 @@ class AuthRepository with ChangeNotifier {
 
   Stream<DatabaseEvent> getDataStream()
   {
+    print(userName);
     return _db.child('$_userName').onValue;
   }
 }
