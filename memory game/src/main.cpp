@@ -28,6 +28,7 @@ Adafruit_NeoPixel pixels(NEO_NUMPIXELS, NEO_PIN, NEO_GRB + NEO_KHZ800);
 #define SIMON_GAME 0
 #define SPEED_GAME 1
 
+
 int mode;
 int game;
 int current_sequence;
@@ -43,8 +44,9 @@ bool one_pressed = false;
 unsigned long startTime;
 unsigned long elapsedTime;
 unsigned long speed_time = 0;
+bool shoud_read_user = 1;
 
-void loser();
+void looser();
 void winner();
 void loop1();
 void loop2();
@@ -54,21 +56,40 @@ void setup2();
 void setup() 
 {
   Serial.begin(9600); // Initialize serial communication at 9600 baud rate
+  
+  //Initiate pixels
+  pixels.begin();
+  pixels.setBrightness(BRIGHTNESS);
+
   firebaseSetup();
+
+  //Set pixels color purple - game setup mode
+  for(int i =0; i < 16; i++)
+  {
+    pixels.setPixelColor(i, pixels.Color(119, 7, 55));
+  }
+  pixels.show();
+
+  //Read currint connected user
   current_user = firebaseReadUser();
+
+  //Initiate srand
   std::srand(static_cast<unsigned int>(std::time(nullptr)));
   #if defined(__AVR_ATtiny85__) && (F_CPU == 16000000)
     clock_prescale_set(clock_div_1);
   #endif
-  pixels.begin();
-  pixels.setBrightness(BRIGHTNESS); // Set initial brightness
-  pixels.clear();
-  pixels.show();
+
+  //Initiate buttons 
   button_1.setup();
   button_2.setup();
   button_3.setup();
   button_4.setup();
+
+  //mp3 Setup
   mp3_setup();
+  set_volume(25);
+
+  //Set game mode
   pinMode(SWITCH_PIN, INPUT_PULLUP);
   game = digitalRead(SWITCH_PIN);
   if(game == SIMON_GAME){
@@ -76,38 +97,47 @@ void setup()
   }else{
     setup2();
   }
-  pixels.show();
-
-  set_volume(5);
 }
 
-void setup1()
+void setup1() //SIMON_GAME
 {
+  //Set pixels color blue - SIMON_GAME setup mode
   for(int i =0; i < 16; i++)
   {
     pixels.setPixelColor(i, pixels.Color(125, 249, 255));
   }
   pixels.show();
   delay(500);
+
   current_user = firebaseReadUser();
+  shoud_read_user = 0;
+
+  //Finish game setup
   pixels.clear();
   pixels.show();
+
   current_sequence = 0;
   mode = PENDING_MODE;
   user_index = 0;
 }
 
-void setup2()
+void setup2() //SPEED_GAME
 {
+  //Set pixels color pink - SPEED_GAME setup mode
   for(int i =0; i < 16; i++)
   {
     pixels.setPixelColor(i, pixels.Color(159, 43, 104));
   }
   pixels.show();
   delay(500);
+
   current_user = firebaseReadUser();
+  shoud_read_user = 0;
+
+  //Finish game setup
   pixels.clear();
   pixels.show();
+
   mode = PENDING_MODE;
   game2_level = 0;
   elapsedTime = 0;
@@ -116,82 +146,85 @@ void setup2()
 
 void loop()
 {
-  // int sequences_1 [] = {1,2,3,2,1,4,2, 0, 0,0,0,0,0,0,0,0};
-  // delay(1000);
-  // for(int i = 0; i < 7; i++)
-  // {
-  //   switch (sequences_1[i])
-  //   {
-  //     case 1:
-  //     button_1.show();
-  //       //play_filename(3, 1);
-  //       delay(1000-60*current_sequence);
-  //       break;
-  //     case 2:
-  //     button_2.show();
-  //       //play_filename(3, 2);
-  //       delay(1000-60*current_sequence);
-  //       break;
-  //     case 3:
-  //     button_3.show();
-  //       //play_filename(3, 3);
-  //       delay(1000-60*current_sequence);
-  //       break;
-  //     case 4:
-  //     button_4.show();
-  //       //play_filename(3, 4);
-  //       delay(1000-60*current_sequence);
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // }
+  //Need to switch game
   int current_game = digitalRead(SWITCH_PIN);
   if(current_game != game)
   {
     game = current_game;
     if(game == SIMON_GAME)
     {
-      setup1();
+      setup1(); //SIMON_GAME
     }
     else
     {
-      setup2();
+      setup2(); //SPEED_GAME
     }
   }
 
+  //Play game
   if(game == SIMON_GAME)
   {
-    loop1();
+    loop1(); //SIMON_GAME
   }
   else
   {
-    loop2();
+    loop2(); //SPEED_GAME
   }
 }
 
 void loop1()
 {
-  if(mode == PENDING_MODE)
+  //SIMON_GAME
+  if(mode == PENDING_MODE) //press any button to start
   {
-    Serial.println("in pending");
+    if(shoud_read_user)
+    {
+      shoud_read_user =0;
+      int led_status = digitalRead(button_1.ledPin);
+      if(led_status == LOW)
+      {
+        button_1.on();
+        button_2.on();
+        button_3.on();
+        button_4.on();
+      }
+      current_user = firebaseReadUser();
+      button_1.off();
+      button_2.off();
+      button_3.off();
+      button_4.off();
+    }
+
     if( button_1.isPressed() || button_2.isPressed() || button_3.isPressed() || button_4.isPressed() )
     {
+      shoud_read_user = 1;
       mode = GAME_MODE;
     }
   }
-  else if(mode == GAME_MODE)
+  else if(mode == GAME_MODE) //Game showes sequence
   {
+    srand(time(0));
     user_index = 0;
+
     if(current_sequence < MAX_SEQUENCE)
     {
+      //Pick random button.
       int random_number = std::rand() % 4 + 1;
       sequences[current_sequence] = random_number;
+
+      //pixel show level
       for(int i = 0 ; i <current_sequence; i++)
       {
         pixels.setPixelColor(i, pixels.Color(0, 150, 0));
         pixels.show();
       }
+
+      // Level up sound
+      delay(300);
+      if(current_sequence > 0)
+        play_filename(3,5);
+
+      //Level up led blink
       for(int i = 0; i<3; i++)
       {
         pixels.setPixelColor(current_sequence, pixels.Color(0, 150, 0));
@@ -203,12 +236,15 @@ void loop1()
       }
       pixels.setPixelColor(current_sequence, pixels.Color(0, 150, 0));
       pixels.show();
+
+      //update level
       current_sequence++;
-      
-      Serial.print("steps: ");
-      Serial.println(current_sequence);
       delay(1000);
+
+      //show sequence faster for advanced levels
       int delay_ = (current_sequence >= 4) ? 100 : 500;
+
+      //show sequence
       for(int i = 0; i < current_sequence; i++)
       {
         switch (sequences[i])
@@ -240,10 +276,12 @@ void loop1()
       winner();
     }
   }
-  else if( mode == USER_MODE)
+  else if( mode == USER_MODE) // Handle user input
   {
+    //Set pixels color clear - firebase reading user mode
     pixels.clear();
     pixels.show();
+
     if(user_index >= current_sequence)
     {
       mode = GAME_MODE;
@@ -257,52 +295,74 @@ void loop1()
     else if (mode = USER_MODE)
     {
       int result = button_1.loop() + button_2.loop() + button_3.loop() + button_4.loop();
-      // Serial.print("user_index = ");
-      // Serial.println(user_index);
+
       if(result < 0)
       {
-        loser();
+        looser();
       }
     }
   }
 }
 
-void loop2()
+void loop2() //SPEED_GAME
 {
-  if(mode == PENDING_MODE)
+  if(mode == PENDING_MODE) //press any button to start
   {
-    Serial.println("in pending");
+    if(shoud_read_user)
+    {
+      Serial.println(" shoud_read_user  loop2");
+      shoud_read_user =0;
+      int led_status = digitalRead(button_1.ledPin);
+      if(led_status == LOW)
+      {
+        Serial.println("button light on  loop2");
+        button_1.on();
+        button_2.on();
+        button_3.on();
+        button_4.on();
+      }
+      current_user = firebaseReadUser();
+      button_1.off();
+      button_2.off();
+      button_3.off();
+      button_4.off();
+
+    }
+
     if( button_1.isPressed() || button_2.isPressed() || button_3.isPressed() || button_4.isPressed() )
     {
+      shoud_read_user = 1;
       mode = GAME_MODE;
     }
   }
-  else if(mode == GAME_MODE)
+  else if(mode == GAME_MODE) //Game showes button
   {
+    srand(time(0));
+
     if(game2_level < MAX_SEQUENCE)
     {
+      //pixel show level
       pixels.setPixelColor(game2_level, pixels.Color(0, 150, 0));
       pixels.show(); 
+
+      //pick random button
       int random_number = std::rand() % 4 + 1;
       sequences[0] = random_number;
       delay(500);
+
       switch (random_number)
       {
         case 1:
           button_1.show();
-          //delay(1000);
           break;
         case 2:
           button_2.show();
-          //delay(1000);
           break;
         case 3:
           button_3.show();
-          //delay(1000);
           break;
         case 4:
           button_4.show();
-          //delay(1000);
           break;
         default:
           break;
@@ -320,35 +380,33 @@ void loop2()
     if (elapsedTime < runtime) 
     {
       int result = button_1.game2Loop() + button_2.game2Loop() + button_3.game2Loop() + button_4.game2Loop();
-      Serial.printf("result = %d\n", result);
+
       if(result == 5){
         mode = GAME_MODE;
         game2_level++;
         speed_time += elapsedTime;
-        Serial.print("***************8speed_time = ");
-        Serial.println(speed_time);
       }
       else if(result != 0)
       {
-        loser();
-        Serial.println("lost beuasue result != 0");
+        looser();
       }
     }
     if(elapsedTime > runtime && mode == USER_MODE){
-      loser();
-      Serial.println("lost beuasue elapsed time");
+      looser();
     }
   }
 
 }
 
-void loser()
+void looser() //Handle loosing 
 {
   button_1.on();
   button_2.on();
   button_3.on();
   button_4.on();
+
   play_filename(2, 6);
+
   for(int i =0; i < 16; i++)
   {
     pixels.setPixelColor(i, pixels.Color(255, 0, 0));
@@ -357,17 +415,20 @@ void loser()
   delay(1500);
 
   mode = PENDING_MODE;
-
+  current_user = firebaseReadUser();
   if(game == SIMON_GAME)
   {
     int final_level = current_sequence;
     current_sequence = 0;
     user_index = 0;
+    Serial.print("user is in looser(): ");
+    Serial.println(current_user);
     // write to firebase
     if(final_level - 1 != 0)
     {
       firebaseWrite(current_user, final_level-1);
     }
+
   }else if(game == SPEED_GAME)
   {
     if(game2_level != 0)
@@ -381,19 +442,16 @@ void loser()
     else{
       firebaseWriteSpeed(current_user, 0);
     }
+
     game2_level = 0;
     speed_time =0 ;
   }
 
-  button_1.off();
-  button_2.off();
-  button_3.off();
-  button_4.off();
   pixels.clear();
   pixels.show();
 }
 
-void winner()
+void winner()  //Handle winning
 {
   int final_level = (game == SIMON_GAME) ? current_sequence : game2_level;
   button_1.on();
@@ -407,8 +465,8 @@ void winner()
   }
   pixels.show();
   delay(1500);
-  delay(1500);
 
+  current_user = firebaseReadUser();
   // write to firebase
   firebaseWrite(current_user,final_level);
   if(game == SPEED_GAME)
@@ -421,15 +479,13 @@ void winner()
       firebaseWriteSpeed(current_user, 0);
     }
   }
-  button_1.off();
-  button_2.off();
-  button_3.off();
-  button_4.off();
+
   current_sequence = 0;
   game2_level = 0;
   speed_time =0;
   mode = PENDING_MODE;
   user_index = 0;
+
   pixels.clear();
   pixels.show();
 }

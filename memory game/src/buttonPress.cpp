@@ -24,11 +24,10 @@ buttonPin(buttonPin),ledPin(ledPin),filename(filename),id(id)
 }
 void buttonPress::setup()
 {
-// initialize the pushbutton pin as an input:
+  // initialize the pushbutton pin as an input:
   pinMode(buttonPin, INPUT_PULLUP);
   pinMode(ledPin, OUTPUT);
-  //strip.begin(); // Initialize NeoPixel strip object (REQUIRED)
-  //strip.show();  // Initial#include <HardwareSerial.h>ize all pixels to 'off'
+
 }
 int buttonPress::loop()
 {
@@ -37,20 +36,13 @@ int buttonPress::loop()
   //dont remove!! needed for delay.
   Serial.printf("buttom %d state = %d, prev = %d\n", id,buttonState,prevButtonState);
   if (!one_pressed && buttonState == LOW && prevButtonState == HIGH) {
-    Serial.print("is pressed...");
-    Serial.println(id);
     if(id != sequences[user_index])
     {
-      Serial.print("user index = ");
-      Serial.println(user_index);
-      Serial.print(id);
-      Serial.println(" is lost-----");
       prevButtonState = buttonState;
       i_lost = true;
     }
     if(!i_lost){
       one_pressed = true;
-      set_volume(15);
       play_filename(3, filename);
       // turn LED on:
       digitalWrite(ledPin, HIGH);
@@ -58,8 +50,6 @@ int buttonPress::loop()
     }
   }
   if(buttonState == HIGH && prevButtonState == LOW){
-    Serial.print(id);
-    Serial.println(" is incide----------------------");
     // turn LED off:
     if(i_lost){
       prevButtonState = buttonState;
@@ -84,9 +74,6 @@ void colorWipe(uint32_t color, int wait, Adafruit_NeoPixel* strip) {
 
 void buttonPress::show()
 {
-  set_volume(15);
-  Serial.print("show...");
-  Serial.println(id);
   play_filename(3, filename);
   digitalWrite(ledPin, HIGH);
   if(game == 0)
@@ -107,18 +94,14 @@ void buttonPress::off()
 
 void buttonPress::on()
 {
-   digitalWrite(ledPin, HIGH);
+  digitalWrite(ledPin, HIGH);
 }
 
 bool buttonPress::isPressed()
 {
   buttonState = digitalRead(buttonPin);
   if(!one_pressed && buttonState == LOW && prevButtonState == HIGH)
-  //if(buttonState == LOW)
   {
-    Serial.print("ispressed_____");
-    Serial.println(id);
-    set_volume(15);
     play_filename(2, 7);
     // turn LED on:
     digitalWrite(ledPin, HIGH);
@@ -133,7 +116,6 @@ bool buttonPress::isPressed()
   if(buttonState == HIGH && prevButtonState == LOW){
     one_pressed = false;
     prevButtonState = buttonState;
-    Serial.println("--------------isPressed in if");
     if(game == 0)
       return true;
   }
@@ -147,19 +129,14 @@ int buttonPress::game2Loop()
   //dont remove!! needed for delay.
   Serial.printf("buttom %d state = %d, prev = %d\n", id,buttonState,prevButtonState);
   if (!one_pressed && buttonState == LOW && prevButtonState == HIGH) {
-    Serial.print("is pressed...");
-    Serial.println(id);
     if(id != sequences[0])
     {
-      Serial.print(id);
-      Serial.println(" is lost-----");
       prevButtonState = buttonState;
       delay(100);
       digitalWrite(ledPin, LOW);
       return -1;
     }
       one_pressed = true;
-      set_volume(15);
       play_filename(3, filename);
       // turn LED on:
       digitalWrite(ledPin, HIGH);
@@ -169,13 +146,10 @@ int buttonPress::game2Loop()
     return 5;
   }
   if(buttonState == HIGH && prevButtonState == LOW){
-    Serial.print(id);
-    Serial.println(" is incide----------------------");
     // turn LED off:
     one_pressed = false;
     digitalWrite(ledPin, LOW);
     prevButtonState = buttonState;
-    //return 5;
   }
   return 0;
 }

@@ -13,9 +13,6 @@ extern int game;
 
 void firebaseSetup()
 {
-  Serial.begin(9600);
-  // pinMode(LED_BUILTIN, OUTPUT);
-  // digitalWrite(LED_BUILTIN, LOW);
   for(int i =0; i < 16; i++)
   {
     pixels.setPixelColor(i, pixels.Color(255, 103, 0));
@@ -26,28 +23,14 @@ void firebaseSetup()
   delay(1000);
 
   // Connect to WiFi
-  Serial.println();
-  Serial.println();
-  Serial.print("Connecting to: ");
-  Serial.println(_SSID);
   WiFi.begin(_SSID, _PASSWORD);
 
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print("-");
   }
-  pixels.clear();
+
   pixels.show();
-
-  Serial.println("");
-  Serial.println("WiFi Connected");
-
-  // Print the IP address
-  Serial.print("IP Address: ");
-  Serial.print("http://");
-  Serial.print(WiFi.localIP());
-  Serial.println("/");
-  // digitalWrite(LED_BUILTIN, HIGH);
 }
 
 void firebaseWrite(String user, int level)
@@ -64,20 +47,14 @@ void firebaseWrite(String user, int level)
     }
     flag = 0;
     delay(500);
-    Serial.print("-");
   }
-  Serial.print("wifi");
-  Serial.println(WiFi.status());
-  pixels.clear();
-  pixels.show();
-  Serial.print("user:");
-  Serial.println(user);
-  Serial.print("49,firebase:");
-  Serial.println(level);
-  String game_name = (game == 0) ? "/memory_game" : "/speed_game";
-  String user_path = user + game_name + "/level_" + String(level);
-  int gameNum = firebase.getInt(user_path);
-  firebase.setInt(user_path, ++gameNum);
+  if(user != "None")
+  {
+    String game_name = (game == 0) ? "/memory_game" : "/speed_game";
+    String user_path = user + game_name + "/level_" + String(level);
+    int gameNum = firebase.getInt(user_path);
+    firebase.setInt(user_path, ++gameNum);
+  }
 }
 
 void firebaseWriteSpeed(String user, int update)
@@ -104,19 +81,22 @@ void firebaseWriteSpeed(String user, int update)
   Serial.println(user);
   Serial.print("49,firebase:");
   Serial.println(update);
-  String user_path = user + "/speed_game" + "/last";
-  firebase.setInt(user_path, update);
-  if(update)
+  if(user != "None")
   {
-    String user_path = user + "/speed_game" + "/fast";
-    int gameNum = firebase.getInt(user_path);
-    firebase.setInt(user_path, ++gameNum);
-  }
-  else
-  {
-    String user_path = user + "/speed_game" + "/slow";
-    int gameNum = firebase.getInt(user_path);
-    firebase.setInt(user_path, ++gameNum);
+    String user_path = user + "/speed_game" + "/last";
+    firebase.setInt(user_path, update);
+    if(update)
+    {
+      String user_path = user + "/speed_game" + "/fast";
+      int gameNum = firebase.getInt(user_path);
+      firebase.setInt(user_path, ++gameNum);
+    }
+    else
+    {
+      String user_path = user + "/speed_game" + "/slow";
+      int gameNum = firebase.getInt(user_path);
+      firebase.setInt(user_path, ++gameNum);
+    }
   }
 }
 

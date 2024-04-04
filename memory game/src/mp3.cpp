@@ -6,24 +6,24 @@ HardwareSerial MP3(2);  // Use UART2 for MP3 player communication
 void mp3_setup()
 {
     // Initiate the serial monitor.
-    Serial.begin(9600);
+    //Serial.begin(9600);
     // Initiate the Serial MP3 Player Module.
     MP3.begin(9600, SERIAL_8N1, 17, 16);
     delay(100);  //delay for stability
     if (reset_mp3() == true) 
     {
-        Serial.println("reset MP3 success");
+        //Serial.println("reset MP3 success");
     } 
     else 
     {
-        Serial.println("reset MP3 fail");
+        //Serial.println("reset MP3 fail");
         delay(10000);
     }
     select_SD_card();  //ALWAYS select SD card at beginning
     delay(1200);  
 }
 bool reset_mp3() {
-  Serial.println("MP3 RESET");
+  //Serial.println("MP3 RESET");
   MP3.flush();  //delete all data in serial2 buffer for MP3
   int len = 5;
   for (int i = 0; i < len; i++) {
@@ -38,7 +38,7 @@ bool reset_mp3() {
 }
 
 void select_SD_card() {
-  Serial.println("MP3_select_SD_card");
+  //Serial.println("MP3_select_SD_card");
   int len = 4;
   for (int i = 0; i <= len; i++) {
     MP3.write(select_SD_CMD[i]);
@@ -46,9 +46,9 @@ void select_SD_card() {
 }
 
 void set_volume(byte volume) {
-  Serial.print("set volume= ");
-  Serial.print(volume);
-  Serial.println(" of 30");
+  //Serial.print("set volume= ");
+  //Serial.print(volume);
+  //Serial.println(" of 30");
   MP3.write(start_byte);
   byte msg_len = 0x03;
   MP3.write(msg_len);
@@ -59,10 +59,10 @@ void set_volume(byte volume) {
 }
 
 void play_filename(int8_t directory, int8_t file) {
-  Serial.print("playing directory ");
-  Serial.print(directory);
-  Serial.print(" file number ");
-  Serial.println(file);
+  //Serial.print("playing directory ");
+  //Serial.print(directory);
+  //Serial.print(" file number ");
+  //Serial.println(file);
   MP3.write(start_byte);
   byte msg_len = 0x04;
   MP3.write(msg_len);
@@ -87,20 +87,20 @@ void play_filename(int8_t directory, int8_t file) {
 void mp3_read()
 {
     if (MP3.available()) {
-    Serial.println("Received data from MP3 player:");
+    //Serial.println("Received data from MP3 player:");
     
     while (MP3.available()) {
       char receivedByte = MP3.read();
 
       // Print each byte in hexadecimal format
-      Serial.print("0x");
+      //Serial.print("0x");
       if (receivedByte < 0x10) {
-        Serial.print("0"); // Print leading zero for single digit
+        //Serial.print("0"); // Print leading zero for single digit
       }
-      Serial.print(receivedByte, HEX);
-      Serial.print(" ");
+      //Serial.print(receivedByte, HEX);
+      //Serial.print(" ");
     }
-    Serial.println(); // Print a newline after printing the buffer
+    //Serial.println(); // Print a newline after printing the buffer
   }
 
   // Other loop tasks
