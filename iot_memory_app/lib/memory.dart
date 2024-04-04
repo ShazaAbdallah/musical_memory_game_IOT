@@ -20,6 +20,7 @@ class _memoryGameState extends State<memoryGame> {
   int total_wins = 0;
   int max_level = 0;
   double max_y = 0;
+  int ave = 0;
   List<BarChartGroupData> barsData = [];
   LinearGradient get _barsGradient => LinearGradient(
         colors: [
@@ -34,10 +35,13 @@ class _memoryGameState extends State<memoryGame> {
     Map<String,double> data = {};
     barsData = [];
     total_games = 0;
+    ave = 0;
+    max_level = 0;
     print(user_data);
     for (var i = 1; i <= 16; i++) {
-      if(user_data['memory_game']['level_$i'] != null){
+      if(user_data['memory_game']?['level_$i'] != 0){
         total_games = total_games + user_data['memory_game']['level_$i'] as int;
+        ave += i*user_data['memory_game']['level_$i'] as int;
         if(i == 16) total_wins = user_data['memory_game']['level_$i'] as int;
         if(i > max_level) max_level = i;
         if(user_data['memory_game']['level_$i'].toDouble() > max_y) max_y = user_data['memory_game']['level_$i'].toDouble();
@@ -56,6 +60,8 @@ class _memoryGameState extends State<memoryGame> {
         );
       }
     }
+    if(total_games!=0)
+      ave = (ave / total_games).toInt();
   }
 
   Widget getTitles(double value, TitleMeta meta) {
@@ -74,12 +80,15 @@ class _memoryGameState extends State<memoryGame> {
 
   @override
   Widget build(BuildContext context) {
+    final authRepository = Provider.of<AuthRepository>(context,  listen : false);
+    String user_name = authRepository.userName;
     double size = 32;
     return Scaffold(
       backgroundColor: Colors.lightBlue[50],
       appBar: AppBar(
-      backgroundColor: Colors.lightBlue[100],
-      iconTheme: IconThemeData(color: Colors.lightBlue[800],),
+        title: Text(user_name, style: TextStyle(color: Colors.deepPurple[700], fontWeight: FontWeight.bold),),
+        backgroundColor: Colors.lightBlue[100],
+        iconTheme: IconThemeData(color: Colors.lightBlue[800],),
       ),
       body: SingleChildScrollView(
         child:  StreamBuilder(
@@ -110,7 +119,7 @@ class _memoryGameState extends State<memoryGame> {
               ),
 
               Text('Statistics',
-              style: TextStyle(color: Colors.yellow[700], fontWeight: FontWeight.bold, fontSize: size),
+              style: TextStyle(color: Colors.deepPurple[700], fontWeight: FontWeight.bold, fontSize: size),
               ),
 
               Container(
@@ -125,53 +134,79 @@ class _memoryGameState extends State<memoryGame> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Column(children: [
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.02,
+                child:Column(
+                  children: [
+                    Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text('  Highest Score:',
+                          style: TextStyle(
+                            color: Colors.deepPurple[700],
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold
+                            ),),
                     ),
+                    Align(
+                          alignment: Alignment.center,
+                          child: Text('$max_level',
+                          style: TextStyle(
+                            color: Colors.lightBlue[700],
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold
+                            ),),
+                    ),
+                  ],
+                )
+              ),
+
+              Card(
+                color: Colors.white,
+                shadowColor: Colors.lightBlue[700],
+                surfaceTintColor: Colors.white,
+                elevation: 10.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child:Column(
+                  children: [
+                    Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text('  Average Score:',
+                          style: TextStyle(
+                            color: Colors.deepPurple[700],
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold
+                            ),),
+                    ),
+                    Align(
+                          alignment: Alignment.center,
+                          child: Text('$ave',
+                          style: TextStyle(
+                            color: Colors.lightBlue[700],
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold
+                            ),),
+                    ),
+                  ],
+                )
+              ),
+
+              Card(
+                color: Colors.white,
+                shadowColor: Colors.lightBlue[700],
+                surfaceTintColor: Colors.white,
+                elevation: 10.0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Column(children: [
                     Row(
                       children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.05,
-                        ),
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: Text('Total Games: $total_games',
+                          child: Text('   Total Games: $total_games',
                           style: TextStyle(
                             color: Colors.lightBlue[800],
-                            fontSize: 20,
-                            ),),
-                        ),
-                      ],
-                    ),
-
-                    Row(
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.05,
-                        ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text('Total Wins: $total_wins',
-                          style: TextStyle(
-                            color: Colors.green[800],
-                            fontSize: 20,
-                            ),),
-                        ),
-                      ],
-                    ),
-
-                    Row(
-                      children: [
-                        Container(
-                          width: MediaQuery.of(context).size.width * 0.05,
-                        ),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text('Top Level: $max_level',
-                          style: TextStyle(
-                            color: Colors.yellow[800],
-                            fontSize: 20,
+                            fontSize: 18,
                             ),),
                         ),
                       ],
@@ -215,8 +250,6 @@ class _memoryGameState extends State<memoryGame> {
                                       ),
                                     ),
                                     leftTitles: AxisTitles(
-                                      axisNameSize: 25,
-                                      axisNameWidget: Text('Score', style: TextStyle(color: Colors.lightBlue[700], fontWeight: FontWeight.bold),),
                                       sideTitles: SideTitles(showTitles: false),
                                     ),
                                     topTitles: const AxisTitles(

@@ -216,10 +216,10 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                             controller: userNameController,
                             decoration:   InputDecoration(
                               filled: true,
-                              fillColor: Colors.yellow[100],
+                              fillColor: Colors.deepPurple[100],
                               labelText: 'Username',
-                              labelStyle:  TextStyle(color: Colors.yellow[800], fontSize: 24),
-                              prefixIcon:  Icon(Icons.person, color: Colors.yellow[800],  size: 30),
+                              labelStyle:  TextStyle(color: Colors.deepPurple[700], fontSize: 24),
+                              prefixIcon:  Icon(Icons.person, color: Colors.deepPurple[700],  size: 30),
                               contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                               enabledBorder:  UnderlineInputBorder(
                                 borderRadius: BorderRadius.circular(10.0),
@@ -241,10 +241,10 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                               obscureText: true,
                               decoration:   InputDecoration(
                                 filled: true,
-                                fillColor: Colors.lightBlue[50],
+                                fillColor: Colors.deepPurple[100],
                                 labelText: 'Password',
-                                labelStyle:  TextStyle(color: Colors.lightBlue[700], fontSize: 24),
-                                prefixIcon:  Icon(Icons.password, color: Colors.lightBlue[700], size: 30),
+                                labelStyle:  TextStyle(color: Colors.deepPurple[700], fontSize: 24),
+                                prefixIcon:  Icon(Icons.password, color: Colors.deepPurple[700], size: 30),
                                 contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                                 enabledBorder:  UnderlineInputBorder(
                                   borderRadius: BorderRadius.circular(10.0),
@@ -270,10 +270,10 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                   obscureText: true,
                                   decoration:   InputDecoration(
                                     filled: true,
-                                    fillColor: Colors.orange[100],
+                                    fillColor: Colors.deepPurple[100],
                                     labelText: 'Verify Password',
-                                    labelStyle:  TextStyle(color: Colors.orange[800], fontSize: 24),
-                                    prefixIcon:  Icon(Icons.password, color: Colors.orange[800], size: 30),
+                                    labelStyle:  TextStyle(color: Colors.deepPurple[700], fontSize: 24),
+                                    prefixIcon:  Icon(Icons.password, color: Colors.deepPurple[700], size: 30),
                                     contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                                     enabledBorder:  UnderlineInputBorder(
                                       borderRadius: BorderRadius.circular(10.0),
@@ -333,7 +333,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                 });
                               },
                               style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all<Color?>(Colors.pink[50]),
+                                backgroundColor: MaterialStateProperty.all<Color?>(Colors.deepPurple[100]),
                                 shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(18.0),
@@ -345,7 +345,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                   : 'Already have an account? Login',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  color: Colors.pink[700],
+                                  color: Colors.deepPurple[700],
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20.0,
                                 ),

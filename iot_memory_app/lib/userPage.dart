@@ -26,52 +26,13 @@ class _UserPageState extends State<UserPage> {
             },
           ),
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
           children:  <Widget>[
             Container(
               height: MediaQuery.of(context).size.height * 0.03,
             ),
-
-            RichText(
-            text: TextSpan(
-              children: [
-                TextSpan(
-                  text: 'W',
-                  style: TextStyle(color: Colors.yellow[700], fontWeight: FontWeight.bold, fontSize: size),
-                ),
-                TextSpan(
-                  text: 'e',
-                  style: TextStyle(color: Colors.lightBlue[700], fontWeight: FontWeight.bold, fontSize: size),
-                ),
-                TextSpan(
-                  text: 'l',
-                  style: TextStyle(color: Colors.orange[800], fontWeight: FontWeight.bold, fontSize: size),
-                ),
-                TextSpan(
-                  text: 'c',
-                  style: TextStyle(color: Colors.pink[700], fontWeight: FontWeight.bold, fontSize: size),
-                ),
-                TextSpan(
-                  text: 'o',
-                  style: TextStyle(color: Colors.lightBlue[700], fontWeight: FontWeight.bold, fontSize: size),
-                ),
-                TextSpan(
-                  text: 'm',
-                  style: TextStyle(color: Colors.orange[800], fontWeight: FontWeight.bold, fontSize: size),
-                ),
-                TextSpan(
-                  text: 'e',
-                  style: TextStyle(color: Colors.pink[700], fontWeight: FontWeight.bold, fontSize: size),
-                ),
-                TextSpan(
-                  text: ' $user_name', // Include the user name after "Welcome"
-                  style: TextStyle(color: Colors.deepPurple[400], fontWeight: FontWeight.bold, fontSize: size),
-                ),
-              ],
-            ),
-            ),
-
+            Text("Welcome $user_name", style: TextStyle(fontSize: size,fontWeight: FontWeight.bold, color: Colors.deepPurple),),
             Container(
               height: MediaQuery.of(context).size.height * 0.04,
             ),
@@ -289,11 +250,15 @@ class _UserPageState extends State<UserPage> {
                           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
                           ),
                           TextSpan(
-                          text: '3. GAME STARTED\n     starting with a sequence\n     of one press.\n',
+                          text: '3. Press any button to start.\n',
                           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
                           ),
                           TextSpan(
-                          text: '4. press the buttons in order\n',
+                          text: '4. GAME STARTED\n     starting with a sequence\n     of one press.\n',
+                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          TextSpan(
+                          text: '5. press the buttons in order\n',
                           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
                           ),
                           TextSpan(
@@ -306,7 +271,7 @@ class _UserPageState extends State<UserPage> {
                           ),
                           TextSpan(
                           text: 'Keep it up untill level 16\n',
-                          style: TextStyle(color: Colors.yellow[700], fontWeight: FontWeight.bold, fontSize: 16),
+                          style: TextStyle(color: Colors.lightBlue[700], fontWeight: FontWeight.bold, fontSize: 16),
                           ),
                           TextSpan(
                           text: 'We Have A WINNER\n',
@@ -402,7 +367,11 @@ class _UserPageState extends State<UserPage> {
                           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
                           ),
                           TextSpan(
-                          text: '3. GAME STARTED\n     Look for the button that is lit.\n',
+                          text: '3. Press any button to start.\n',
+                          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          TextSpan(
+                          text: '4. GAME STARTED\n     Look for the button that is lit.\n',
                           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
                           ),
                           TextSpan(
