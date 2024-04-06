@@ -49,6 +49,6 @@ Take a look at our flutter app for the musical memory game
 ## Project Poster:
 Take a look at our project poster for a visual summary of the Musical Memory Game.
 
-![Project Poster](/images/project_poster.jpg)
+will be added later
 
 Thank you for visiting our project repository. Feel free to explore the code and resources provided. If you have any questions, comments, or suggestions, please don't hesitate to reach out to our team.
