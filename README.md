@@ -10,7 +10,6 @@ Users can track user statistics through a companion Flutter app, enhancing the i
 ## Libraries and Versions:
 For this project, we utilized the ESP32 microcontroller, programming them with several libraries to ensure smooth gameplay and functionality.
 
-- **Arduino IDE:** Version specify_version
 - **ESP32 Board:** esp32doit-devkit-v1
 - **Libraries:**
   - **adafruit/Adafruit:**  NeoPixel@^1.12.0
