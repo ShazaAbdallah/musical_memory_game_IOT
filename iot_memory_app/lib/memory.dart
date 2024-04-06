@@ -38,7 +38,7 @@ class _memoryGameState extends State<memoryGame> {
     ave = 0;
     max_level = 0;
     print(user_data);
-    for (var i = 1; i <= 16; i++) {
+    for (var i = 0; i <= 16; i++) {
       if(user_data['memory_game']?['level_$i'] != 0){
         total_games = total_games + user_data['memory_game']['level_$i'] as int;
         ave += i*user_data['memory_game']['level_$i'] as int;

@@ -51,6 +51,7 @@ class AuthRepository with ChangeNotifier {
       try {
         DatabaseReference reference = FirebaseDatabase.instance.reference().child('$username');
         Map<dynamic,dynamic> map0 = {
+          'level_0':0,
           'level_1':0,
           'level_2':0,
           'level_3':0,
