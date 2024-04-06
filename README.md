@@ -1,5 +1,5 @@
 # Musical Memory Game Project
-Shaza , Amal and Mariam developing a musical memory game in IOT course at Technion
+Shaza , Amal and Mariam developing a musical memory game in IOT course at Technion.\t
 Welcome to the Musical Memory Game project repository! This innovative project features a musical memory game with two engaging modes:
 1. A musical memory game with a random sequence for users to follow.
 2. A speed game mode where users must press the "on" button as quickly as possible.
