@@ -44,7 +44,7 @@ Below is the final and accurate connections diagram for the project, following o
 ## App Screens:
 Take a look at our flutter app for the musical memory game
 
-<img src="assets/app_screens/Screenshot_1712433173.png" width="300"><img src="assets/app_screens/Screenshot_1712433198.png" width="300">
+<img src="assets/app_screens/Screenshot_1712433173.png" width="300">  <img src="assets/app_screens/Screenshot_1712433198.png" width="300">
 
 ## Project Poster:
 Take a look at our project poster for a visual summary of the Musical Memory Game.
