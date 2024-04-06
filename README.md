@@ -7,14 +7,6 @@ Welcome to the Musical Memory Game project repository! This innovative project f
 
 Users can track user statistics through a companion Flutter app, enhancing the interactive experience.
 
-## Libraries and Versions:
-For this project, we utilized the ESP32 microcontroller, programming them with several libraries to ensure smooth gameplay and functionality.
-
-- **ESP32 Board:** esp32doit-devkit-v1
-- **Libraries:**
-  - **adafruit/Adafruit:**  NeoPixel@^1.12.0
-  - **rupakpoddar/ESP32:** Firebase@^1.0.0
-
 ## Folder Structure:
 This repository is organized into several key directories:
 
@@ -35,6 +27,13 @@ Here's a comprehensive list of the hardware components used in this project, inc
 - Neopixel Ring: 1 unit
 - Switch: 1 unit
 
+## Libraries and Versions:
+For this project, we utilized the ESP32 microcontroller, programming them with several libraries to ensure smooth gameplay and functionality.
+
+- **ESP32 Board:** esp32doit-devkit-v1
+- **Libraries:**
+  - **adafruit/Adafruit:**  NeoPixel@^1.12.0
+  - **rupakpoddar/ESP32:** Firebase@^1.0.0
 ## Final Connections Diagram:
 Below is the final and accurate connections diagram for the project, following our guidelines.
 
