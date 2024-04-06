@@ -7,7 +7,7 @@ Welcome to the Musical Memory Game project repository! This innovative project f
 
 Users can track user statistics through a companion Flutter app, enhancing the interactive experience.
 
-<img src="assets/WhatsApp Image 2024-04-06 at 23.27.23_14f59d1e.jpg" width="600">
+<img src="assets/WhatsApp Image 2024-04-06 at 23.27.23_14f59d1e.jpg" width="500">
 
 ## Folder Structure:
 This repository is organized into several key directories:
