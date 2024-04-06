@@ -1,0 +1,9 @@
+_SSID "Mariam"          // Your WiFi SSID
+_PASSWORD "12345678"      // Your WiFi Password
+REFERENCE_URL "https://simon-game-4d363-default-rtdb.firebaseio.com/" // Our firebse URL
+SWITCH_PIN 33 // switch pin
+NEO_PIN 19 // neopixel ring pin
+buttonPress button_1(5, 4, 1, 1); // const int buttonPin,const int ledPin, int filename, int id
+buttonPress button_2(27, 26, 2, 2); // const int buttonPin,const int ledPin, int filename, int id
+buttonPress button_3(21, 18, 3, 3); // const int buttonPin,const int ledPin, int filename, int id
+buttonPress button_4(22, 23, 4, 4); // const int buttonPin,const int ledPin, int filename, int id

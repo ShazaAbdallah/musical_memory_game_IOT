@@ -13,7 +13,7 @@ This repository is organized into several key directories:
 - **/memory game:** Main source code for the project.
 - **/iot_memory_app:** Contains flutter app source code.
 - **/Unit tests:** Basic tests for our game components.
-- **/Assets:** Audio files used for the project and 3D printed parts.
+- **/assets:** Audio files used for the project and 3D printed parts.
 
 ## Materials List:
 Here's a comprehensive list of the hardware components used in this project, including quantities:
@@ -39,14 +39,16 @@ For this project, we utilized the ESP32 microcontroller, programming them with s
 ## Final Connections Diagram:
 Below is the final and accurate connections diagram for the project, following our guidelines.
 
-![Connections Diagram](/images/connections_diagram.png)
+![Connections Diagram](assets/diagram1.PNG)
 
 ## App Screens:
 Take a look at our flutter app for the musical memory game
 
+<img src="assets/app_screens/Screenshot_1712433173.png" width="300">  <img src="assets/app_screens/Screenshot_1712433198.png" width="300">  <img src="assets/app_screens/Screenshot_1712433239.png" width="300">  <img src="assets/app_screens/Screenshot_1712433215.png" width="300">  <img src="assets/app_screens/Screenshot_1712433219.png" width="300">  <img src="assets/app_screens/Screenshot_1712433236.png" width="300">
+
 ## Project Poster:
 Take a look at our project poster for a visual summary of the Musical Memory Game.
 
-![Project Poster](/images/project_poster.jpg)
+will be added later
 
 Thank you for visiting our project repository. Feel free to explore the code and resources provided. If you have any questions, comments, or suggestions, please don't hesitate to reach out to our team.
