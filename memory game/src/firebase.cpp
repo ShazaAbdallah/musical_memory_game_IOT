@@ -2,8 +2,8 @@
 #include <ESP32Firebase.h>
 #include <Arduino.h>
 #include <Adafruit_NeoPixel.h>
-#define _SSID "Mariam"          // Your WiFi SSID
-#define _PASSWORD "12345678"      // Your WiFi Password
+#define _SSID "ICST"          // Your WiFi SSID
+#define _PASSWORD "arduino123"      // Your WiFi Password
 #define REFERENCE_URL "https://simon-game-4d363-default-rtdb.firebaseio.com/"  // Your Firebase project reference url
 
 Firebase firebase(REFERENCE_URL);
