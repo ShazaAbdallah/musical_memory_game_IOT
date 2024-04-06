@@ -424,17 +424,12 @@ void looser() //Handle loosing
     Serial.print("user is in looser(): ");
     Serial.println(current_user);
     // write to firebase
-    if(final_level - 1 != 0)
-    {
-      firebaseWrite(current_user, final_level-1);
-    }
+    firebaseWrite(current_user, final_level-1);
 
   }else if(game == SPEED_GAME)
   {
-    if(game2_level != 0)
-    {
       firebaseWrite(current_user, game2_level);
-    }
+
     if (speed_time < 0.5*500*game2_level)
     {
       firebaseWriteSpeed(current_user, 1);
