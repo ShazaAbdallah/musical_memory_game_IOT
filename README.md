@@ -30,6 +30,8 @@ Here's a comprehensive list of the hardware components used in this project, inc
 ## Libraries and Versions:
 For this project, we utilized the ESP32 microcontroller, programming them with several libraries to ensure smooth gameplay and functionality.
 - **Visual Studio Code:** @^1.85.2
+- **Platform IO Extention**
+- **Flutter SDK:** @^3.19.5
 - **ESP32 Board:** esp32doit-devkit-v1
 - **Libraries:**
   - **adafruit/Adafruit:**  NeoPixel@^1.12.0
