@@ -338,7 +338,7 @@ class _UserPageState extends State<UserPage> {
                           style: TextStyle(color: Colors.orange[800], fontWeight: FontWeight.bold, fontSize: 20),
                           ),
                           TextSpan(
-                          text: 'Press the lit button\nas quickly as possible',
+                          text: 'Test your quick response',
                           style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 18),
                           ),
                         ],
