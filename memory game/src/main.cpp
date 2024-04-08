@@ -263,7 +263,7 @@ void loop1()
           break;
         case 4:
           button_4.show();
-          delay(500);
+          delay(delay_);
           break;
         default:
           break;

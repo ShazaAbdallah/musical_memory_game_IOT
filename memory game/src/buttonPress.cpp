@@ -34,7 +34,7 @@ int buttonPress::loop()
   // read the state of the pushbutton value:
   buttonState = digitalRead(buttonPin);
   //dont remove!! needed for delay.
-  Serial.printf("buttom %d state = %d, prev = %d\n", id,buttonState,prevButtonState);
+  //Serial.printf("buttom %d state = %d, prev = %d\n", id,buttonState,prevButtonState);
   if (!one_pressed && buttonState == LOW && prevButtonState == HIGH) {
     if(id != sequences[user_index])
     {
@@ -127,7 +127,7 @@ int buttonPress::game2Loop()
   // read the state of the pushbutton value:
   buttonState = digitalRead(buttonPin);
   //dont remove!! needed for delay.
-  Serial.printf("buttom %d state = %d, prev = %d\n", id,buttonState,prevButtonState);
+  //Serial.printf("buttom %d state = %d, prev = %d\n", id,buttonState,prevButtonState);
   if (!one_pressed && buttonState == LOW && prevButtonState == HIGH) {
     if(id != sequences[0])
     {
