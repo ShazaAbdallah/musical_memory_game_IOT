@@ -341,13 +341,13 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
                                 ),
                               ),
                               child: Text(_isLogin
-                                  ? 'Don\'t have an account? Sign up'
+                                  ? 'Don\'t have an account?\nSign up'
                                   : 'Already have an account? Login',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: Colors.deepPurple[700],
                                   fontWeight: FontWeight.bold,
-                                  fontSize: 20.0,
+                                  fontSize: 18.0,
                                 ),
                               ),
 

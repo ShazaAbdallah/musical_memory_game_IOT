@@ -38,10 +38,11 @@ class _speedGameState extends State<speedGame> {
 
   void  create_bars_list() {
     total_games = 0;
+    ave = 0;
     Map<String,double> data = {};
     barsData = [];
     print(user_data);
-    for (var i = 1; i <= 16; i++) {
+    for (var i = 0; i <= 16; i++) {
       if(user_data['speed_game']['level_$i'] != 0){
         total_games = total_games + user_data['speed_game']['level_$i'] as int;
         ave += i*user_data['speed_game']['level_$i'] as int;
@@ -49,6 +50,18 @@ class _speedGameState extends State<speedGame> {
         if(i > max_level) max_level = i;
         if(user_data['speed_game']['level_$i'].toDouble() > max_y) max_y = user_data['speed_game']['level_$i'].toDouble();
         data['$i'] = user_data['speed_game']['level_$i'].toDouble();
+        barsData.add(
+        BarChartGroupData(
+          x: i,
+          barRods: [
+            BarChartRodData(
+              toY: data['$i']!.toDouble(),
+              gradient: _barsGradient,
+            )
+          ],
+          showingTooltipIndicators: [0],
+         )
+        );
       }
     }
     last = user_data['speed_game']['last'] as int ?? 0;
@@ -56,26 +69,6 @@ class _speedGameState extends State<speedGame> {
     int s = user_data['speed_game']['slow']as int ?? 0;
     fast = f.toDouble();
     slow = s.toDouble();
-    int level_0 = (fast+slow-total_games).toInt();
-    if (level_0 != 0) data['0'] = level_0.toDouble();
-    for (var i = 0; i <= 16; i++) {
-      if(data['$i'] != null){
-          barsData.add(
-          BarChartGroupData(
-            x: i,
-            barRods: [
-              BarChartRodData(
-                toY: data['$i']!.toDouble(),
-                gradient: _barsGradient,
-              )
-            ],
-            showingTooltipIndicators: [0],
-          )
-        );
-      }
-      
-    }
-    total_games = (slow+fast).toInt();
     if(total_games!=0)
       ave = (ave / total_games).toInt();
   }
